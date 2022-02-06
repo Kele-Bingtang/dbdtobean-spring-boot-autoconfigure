@@ -1,0 +1,3 @@
+# Project exclude paths
+/dbdtobean-spring-boot-autoconfigure/target/
+/dbdtobean-spring-boot-starter/target/
