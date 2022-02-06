@@ -8,7 +8,7 @@
         <version>2.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>cn.kbt</groupId>
+    <groupId>cn.youngkbt</groupId>
     <artifactId>dbdtobean-spring-boot-autoconfigure</artifactId>
     <version>1.4</version>
     <name>dbdtobean-spring-boot-autoconfigure</name>
