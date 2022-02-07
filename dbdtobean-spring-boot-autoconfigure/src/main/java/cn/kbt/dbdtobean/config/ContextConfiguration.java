@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @Author Kele-Bing
- * @Create 2021/9/25 14:39
- * @Version 1.0
- * @Describe 上下文配置类
+ * @author Kele-Bing
+ * @since  2021/9/25 14:39
+ * @version   1.0
+ *  上下文配置类
  */
 @Configuration
 @ConditionalOnMissingBean(name = {"dbdToBeanDefinition","dbdToMVCDefinition","defaultComment"})
