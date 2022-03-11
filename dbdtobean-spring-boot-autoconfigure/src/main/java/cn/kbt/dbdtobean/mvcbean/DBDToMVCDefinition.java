@@ -1,12 +1,14 @@
 package cn.kbt.dbdtobean.mvcbean;
 
 import cn.kbt.dbdtobean.core.DBDToBeanContext;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author Kele-Bing
  * @version 1.0
  * @since 2021/9/22 19:15
  */
+@ConfigurationProperties(prefix = "dbdtobean.mvc", ignoreInvalidFields = true)
 public class DBDToMVCDefinition {
     /**
      * Controller位置
