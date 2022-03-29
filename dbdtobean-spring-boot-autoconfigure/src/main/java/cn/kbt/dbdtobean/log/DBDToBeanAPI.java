@@ -120,7 +120,7 @@ public class DBDToBeanAPI {
                 "  username: root  # 数据库用户名\n" +
                 "  password: 123456   # 数据库密码\n" +
                 "  base:\n" +
-                "    -to-upper: true # 开启数据库字段的 _ 去掉，并且后面首字母大写" +
+                "    -to-upper: true # 开启数据库字段的 _ 去掉，并且后面首字母大写\n" +
                 "  mvc:\n" +
                 "    entity-location: cn.kbt.entity   # 实体类全类路径\n" +
                 "    controller-location: cn.kbt.controller   # Controller 全类路径\n" +
@@ -129,7 +129,7 @@ public class DBDToBeanAPI {
                 "    dao-location: cn.kbt.dao     # Dao 全类路径\n" +
                 "    modules-name: cloud-provider-payment8001 # 模块名字，如果项目里有多个模块，可使用，反之不要使用\n" +
                 "  comment:  \n" +
-                "    all-comments: true      # 是否开启全部注解" + 
+                "    all-comments: true      # 是否开启全部注解\n" + 
                 "# 更多内容请访问 dbdToBeanCustomerMVCAPI 方法：DBDToBeanAPI.dbdToBeanCustomerMVCAPI()";
     }
 }
