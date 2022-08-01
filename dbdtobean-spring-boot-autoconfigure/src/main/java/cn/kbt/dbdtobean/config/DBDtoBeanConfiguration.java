@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties({DBDToBeanProperties.class, DBDToBeanDataSource.class, DBDToMVCDefinition.class, DBDToBeanDefinition.class, DefaultComment.class})
-// @ConditionalOnClass(ContextConfiguration.class)
+@ConditionalOnClass(ContextConfiguration.class)
 public class DBDtoBeanConfiguration {
 
     @Bean("dBDToBean")

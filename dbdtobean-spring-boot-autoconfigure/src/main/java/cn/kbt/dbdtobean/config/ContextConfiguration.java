@@ -16,23 +16,23 @@ import org.springframework.context.annotation.Configuration;
  * @version   1.0
  *  上下文配置类
  */
-// @Configuration
-// @ConditionalOnClass(name = {"dbdToBeanDefinition","dbdToMVCDefinition","defaultComment"})
-// public class ContextConfiguration {
-//     @Autowired
-//     DBDToBeanProperties dbdToBeanProperties;
-//     @Autowired
-//     DBDToBeanDefinition dbdToBeanDefinition;
-//     @Autowired
-//     DBDToMVCDefinition dbdToMVCDefinition;
-//     @Autowired
-//     DefaultComment defaultComment;
-//
-//     @Bean
-//     public void setDBDToBeanContext(){
-//         DBDToBeanContext.setDbdToBeanProperties(dbdToBeanProperties);
-//         DBDToBeanContext.setDbdToBeanDefinition(dbdToBeanDefinition);
-//         DBDToBeanContext.setDbdToMVCDefinition(dbdToMVCDefinition);
-//         DBDToBeanContext.setDefaultComment(defaultComment);
-//     }
-// }
+@Configuration
+@ConditionalOnClass(name = {"dbdToBeanDefinition","dbdToMVCDefinition","defaultComment"})
+public class ContextConfiguration {
+    @Autowired
+    DBDToBeanProperties dbdToBeanProperties;
+    @Autowired
+    DBDToBeanDefinition dbdToBeanDefinition;
+    @Autowired
+    DBDToMVCDefinition dbdToMVCDefinition;
+    @Autowired
+    DefaultComment defaultComment;
+
+    @Bean
+    public void setDBDToBeanContext(){
+        DBDToBeanContext.setDbdToBeanProperties(dbdToBeanProperties);
+        DBDToBeanContext.setDbdToBeanDefinition(dbdToBeanDefinition);
+        DBDToBeanContext.setDbdToMVCDefinition(dbdToMVCDefinition);
+        DBDToBeanContext.setDefaultComment(defaultComment);
+    }
+}
