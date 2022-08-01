@@ -156,13 +156,6 @@ public abstract class AbstractDBDToMVC {
             if (DBDToBeanContext.getDefaultComment().isSetHeadComment()) {
                 content.append(DBDToBeanContext.getDbdToBeanDefinition().getHeadComment().generateHeadComments(DBDToBeanContext.getDbdToBeanProperties().getAuthorName()).toString());
             }
-            // if(definition.isMvcAnnotation() && mvcName.equals(DBDToDao.DAO_IMPL_NAME)){
-            //     content.insert(content.indexOf(";") + 1, "\nimport org.apache.ibatis.annotations." + mvcAnnotation.substring(1) + ";");
-            //     content.append(mvcAnnotation).append("\n");
-            // }else if(definition.isMvcAnnotation()){
-            //     content.insert(content.indexOf(";") + 1, "\nimport org.springframework.stereotype." + mvcAnnotation.substring(1) + ";");
-            //     content.append(mvcAnnotation).append("\n");
-            // }
             if (definition.isMvcAnnotation() && !mvcName.equals(DBDToDao.DAO_IMPL_NAME)) {
                 content.insert(content.indexOf(";") + 1, "\nimport org.springframework.stereotype." + mvcAnnotation.substring(1) + ";");
                 content.append(mvcAnnotation).append("\n");
@@ -181,6 +174,7 @@ public abstract class AbstractDBDToMVC {
                     content.append("\t@Autowired\n\tprivate ").append(importBeanName).append(" ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(";\n\n");
                 }
             }
+            dbdToCurd.generateImplCURD(content, createBeanName, isInterface, importBeanName);
         } else {
             // Controller
             content.append(DBDToBeanContext.getDbdToBeanDefinition().setThenGetPackageName(location)).append("\n");
@@ -198,8 +192,8 @@ public abstract class AbstractDBDToMVC {
                 content.insert(content.indexOf(";") + 1, "\nimport " + DBDToBeanContext.getDbdToMVCDefinition().getServiceLocation() + "." + IMPL_NAME + "." + importBeanName + ";\nimport org.springframework.beans.factory.annotation.Autowired;\n");
                 content.append("\t@Autowired\n\tprivate ").append(importBeanName).append(" ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(";\n\n");
             }
+            dbdToCurd.generateControllerCURD(content, createBeanName, importBeanName);
         }
-        dbdToCurd.createImplCURD(content, createBeanName, isInterface, importBeanName);
         content.append("}");
         return content.toString();
     }
@@ -216,32 +210,36 @@ public abstract class AbstractDBDToMVC {
         switch (mvcName) {
             case DBDToController.CONTROLLER_NAME:
                 location = definition.getControllerLocation();
-                if (!mvcAnnotation.equals("@Controller"))
-                    mvcAnnotation = "@Controller";
+                if (!mvcAnnotation.equals("@RestController")) {
+                    mvcAnnotation = "@RestController";
+                }
                 break;
             case DBDToService.SERVICE_IMPL_NAME:
             case DBDToService.SERVICE_INTERFACE_NAME:
                 location = definition.getServiceLocation();
-                if (!mvcAnnotation.equals("@Service"))
+                if (!mvcAnnotation.equals("@Service")) {
                     mvcAnnotation = "@Service";
+                }
                 break;
             case DBDToDao.DAO_IMPL_NAME:
             case DBDToDao.DAO_INTERFACE_NAME:
                 location = definition.getDaoLocation();
-                if (!mvcAnnotation.equals("@Mapper"))
+                if (!mvcAnnotation.equals("@Mapper")) {
                     mvcAnnotation = "@Mapper";
+                }
                 break;
             case DBDToMapper.MAPPER_INTERFACE_NAME:
                 location = definition.getMapperLocation();
-                if (!mvcAnnotation.equals("@Mapper"))
+                if (!mvcAnnotation.equals("@Mapper")) {
                     mvcAnnotation = "@Mapper";
+                }
                 break;
         }
         return location;
     }
 
     /**
-     * 解析MVC的文件名字，封装文件名字的前桌和后缀
+     * 解析MVC的文件名字，封装文件名字的前缀和后缀
      *
      * @param definition MVC 信息
      * @param createBeanName 文件名

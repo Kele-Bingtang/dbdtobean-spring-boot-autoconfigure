@@ -2,6 +2,7 @@ package cn.kbt.dbdtobean.mvcbean;
 
 import cn.kbt.dbdtobean.core.DBDToBeanContext;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Kele-Bing
@@ -9,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2021/9/22 19:15
  */
 @ConfigurationProperties(prefix = "dbdtobean.mvc", ignoreInvalidFields = true)
+@Component("dBDToMVCDefinition")
 public class DBDToMVCDefinition {
     /**
      * Controller位置
@@ -114,6 +116,11 @@ public class DBDToMVCDefinition {
      * 是否生成MVC注解
      **/
     private boolean mvcAnnotation = true;
+
+    /**
+     * 是否生成 @RequestBody 注解
+     */
+    private boolean generateRequestBody = true;
 
     public String getControllerLocation() {
         return controllerLocation;
@@ -327,6 +334,14 @@ public class DBDToMVCDefinition {
 
     public void setMvcAnnotation(boolean mvcAnnotation) {
         this.mvcAnnotation = mvcAnnotation;
+    }
+
+    public boolean isGenerateRequestBody() {
+        return generateRequestBody;
+    }
+
+    public void setGenerateRequestBody(boolean generateRequestBody) {
+        this.generateRequestBody = generateRequestBody;
     }
 
     /**

@@ -2,11 +2,15 @@ package cn.kbt.dbdtobean.config;
 
 import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 
 @ConfigurationProperties(prefix = "dbdtobean", ignoreInvalidFields = true)
+@Component("dBDToBeanProperties")
+@ConditionalOnClass(DBDToBeanDataSource.class)
 public class DBDToBeanProperties {
     /**
      * 适配Springboot的数据库配置

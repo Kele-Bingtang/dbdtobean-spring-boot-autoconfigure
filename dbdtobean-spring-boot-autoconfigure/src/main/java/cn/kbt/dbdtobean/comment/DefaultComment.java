@@ -2,6 +2,7 @@ package cn.kbt.dbdtobean.comment;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Kele-Bing
@@ -10,6 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2021/9/19 15:10
  */
 @ConfigurationProperties(prefix = "dbdtobean.comment", ignoreInvalidFields = true)
+@Component("defaultComment")
 public class DefaultComment {
     /**
      * 是否生成全部注释

@@ -40,7 +40,7 @@ public class DBDToBean extends DBDToBeanCore {
     public void setCreateBeanName(String createBeanName) {
         DBDToBeanContext.getDbdToBeanDefinition().setCreateBeanName(createBeanName);
     }
-    
+    @Override
     public String generateAttrFromTable(String tableName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException {
         return super.generateAttrFromTable(tableName, isConstructor, isSetAndGet, isToString);
     }
@@ -165,7 +165,7 @@ public class DBDToBean extends DBDToBeanCore {
     public HashMap<String, String> generateAttrFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet) throws SQLException, IOException {
         return generateAttrFromDataBase(dateBaseName, isConstructor, isSetAndGet, true);
     }
-
+    @Override
     public HashMap<String, String> generateAttrFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException, IOException {
         return super.generateAttrFromDataBase(dateBaseName, isConstructor, isSetAndGet, isToString);
     }
@@ -181,7 +181,7 @@ public class DBDToBean extends DBDToBeanCore {
         System.out.println("创建【" + DBDToBeanContext.getDbdToBeanDefinition().getCreateBeanName() + "】文件成功，位于：" + new File(createPath).getAbsolutePath());
         return createPath;
     }
-
+    @Override
     public String exportToFile(String fileContent, String path, String dirName) throws IOException {
        if(!isMultimediaContent){
            if(DBDToBeanUtils.isEmpty(path)){
@@ -413,6 +413,10 @@ public class DBDToBean extends DBDToBeanCore {
 
     public void setMavenOrSimple(boolean mavenOrSimple) {
         DBDToBeanContext.getDbdToMVCDefinition().setMavenOrSimple(mavenOrSimple);
+    }
+    
+    public void setGenerateRequestBody(boolean generateRequestBody) {
+        DBDToBeanContext.getDbdToMVCDefinition().setGenerateRequestBody(generateRequestBody);
     }
     
     public DBDToBeanLog getLogInfo(){
