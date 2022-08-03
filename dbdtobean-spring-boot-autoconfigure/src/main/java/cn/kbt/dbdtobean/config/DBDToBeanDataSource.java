@@ -1,7 +1,6 @@
 package cn.kbt.dbdtobean.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Kele-Bing
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
  * 读取 Spring Boot 配置文件的数据库信息
  */
 @ConfigurationProperties(prefix = "spring.datasource", ignoreInvalidFields = true)
-@Component("dBDToBeanDataSource")
 public class DBDToBeanDataSource {
     /**
      * 数据库驱动

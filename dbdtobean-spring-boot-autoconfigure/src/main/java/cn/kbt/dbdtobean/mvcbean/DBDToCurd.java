@@ -38,13 +38,13 @@ public class DBDToCurd {
      */
     public StringBuilder createQueryById(StringBuilder content, String entityName, boolean isController) {
         content.append("\tpublic ").append(entityName).append(" query")
-                .append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+                .append(entityName)
                 .append("ById")
                 .append("(");
         if(isController && dbdToMVCDefinition.isGenerateRequestBody()) {
             content.append("@RequestBody ");
         }
-        content.append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+        content.append(entityName)
                 .append(" ")
                 .append(DBDToBeanUtils.firstCharToLowerCase(entityName))
                 .append(")");
@@ -62,7 +62,7 @@ public class DBDToCurd {
         int endPackage = content.indexOf(";");
         content.insert(endPackage + 1, "\n\nimport java.util.List;");
         content.append("\tpublic ").append("List<").append(entityName).append("> query")
-                .append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+                .append(entityName)
                 .append("List()");
         return content;
     }
@@ -77,12 +77,12 @@ public class DBDToCurd {
      */
     public StringBuilder createInsert(StringBuilder content, String entityName, boolean isController) {
         content.append("\tpublic ").append("int").append(" insert")
-                .append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+                .append(entityName)
                 .append("(");
         if(isController && dbdToMVCDefinition.isGenerateRequestBody()) {
             content.append("@RequestBody ");
         }
-        content.append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+        content.append(entityName)
                 .append(" ")
                 .append(DBDToBeanUtils.firstCharToLowerCase(entityName))
                 .append(")");
@@ -99,12 +99,12 @@ public class DBDToCurd {
      */
     public StringBuilder createUpdate(StringBuilder content, String entityName, boolean isController) {
         content.append("\tpublic ").append("int").append(" update")
-                .append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+                .append(entityName)
                 .append("(");
         if(isController && dbdToMVCDefinition.isGenerateRequestBody()) {
             content.append("@RequestBody ");
         }
-        content.append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+        content.append(entityName)
                 .append(" ")
                 .append(DBDToBeanUtils.firstCharToLowerCase(entityName))
                 .append(")");
@@ -121,13 +121,13 @@ public class DBDToCurd {
      */
     public StringBuilder createDelete(StringBuilder content, String entityName, boolean isController) {
         content.append("\tpublic ").append("int").append(" delete")
-                .append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+                .append(entityName)
                 .append("ById")
                 .append("(");
         if(isController && dbdToMVCDefinition.isGenerateRequestBody()) {
             content.append("@RequestBody ");
         }
-        content.append(DBDToBeanUtils.firstCharToUpperCase(entityName))
+        content.append(entityName)
                 .append(" ")
                 .append(DBDToBeanUtils.firstCharToLowerCase(entityName))
                 .append(")");
@@ -136,7 +136,7 @@ public class DBDToCurd {
 
     /**
      * 生成 Controller 的 CURD 方法
-     * 1.6 Version
+     * V1.6
      *
      * @param content 内容
      * @param entityName 实体类名
@@ -146,22 +146,22 @@ public class DBDToCurd {
         if (DBDToBeanUtils.isNotEmpty(DBDToBeanContext.getDbdToMVCDefinition().getEntityLocation())) {
             this.createImport(content, entityName);
             if (DBDToBeanUtils.isNotEmpty(importBeanName)) {
-                content.append("@GetMapping(").append("query").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("ById").append(")");
-                this.createQueryById(content, entityName, true).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("query").append(entityName).append("ById(id);\n\t}\n\n");
-                content.append("@GetMapping(").append("query").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("List").append(")");
+                content.append("\t@GetMapping(").append("\"query").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("ById").append("\")\n");
+                this.createQueryById(content, entityName, true).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("query").append(entityName).append("ById(").append(DBDToBeanUtils.firstCharToLowerCase(entityName)).append(");\n\t}\n\n");
+                content.append("\t@GetMapping(").append("\"query").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("List").append("\")\n");
                 this.createQuery(content, entityName).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("query").append(entityName).append("List();\n\t}\n\n");
-                content.append("@PostMapping(").append("insert").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append(")");
+                content.append("\t@PostMapping(").append("\"insert").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("\")\n");
                 this.createInsert(content, entityName, true).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("insert").append(entityName).append("(" + DBDToBeanUtils.firstCharToLowerCase(entityName) + ");\n\t}\n\n");
-                content.append("@PostMapping(").append("update").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append(")");
+                content.append("\t@PostMapping(").append("\"update").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("\")\n");
                 this.createUpdate(content, entityName, true).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("update").append(entityName).append("(" + DBDToBeanUtils.firstCharToLowerCase(entityName) + ");\n\t}\n\n");
-                content.append("@PostMapping(").append("delete").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("ById").append(")");
-                this.createDelete(content, entityName, true).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("delete").append(entityName).append("ById(id);\n\t}\n\n");
+                content.append("\t@PostMapping(").append("\"delete").append(DBDToBeanUtils.firstCharToUpperCase(entityName)).append("ById").append("\")\n");
+                this.createDelete(content, entityName, true).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("delete").append(entityName).append("ById(").append(DBDToBeanUtils.firstCharToLowerCase(entityName)).append(");\n\t}\n\n");
             } else {
                 this.createQueryById(content, entityName, true).append(" {\n\t\treturn null;\n\t}\n\n");
                 this.createQuery(content, entityName).append(" {\n\t\treturn null;\n\t}\n\n");
-                this.createInsert(content, entityName, true).append(" {\n\t\treturn null;\n\t}\n\n");
-                this.createUpdate(content, entityName, true).append(" {\n\t\treturn null;\n\t}\n\n");
-                this.createDelete(content, entityName, true).append(" {\n\t\treturn null;\n\t}\n\n");
+                this.createInsert(content, entityName, true).append(" {\n\t\treturn 0;\n\t}\n\n");
+                this.createUpdate(content, entityName, true).append(" {\n\t\treturn 0;\n\t}\n\n");
+                this.createDelete(content, entityName, true).append(" {\n\t\treturn 0;\n\t}\n\n");
             }
         } else {
             throw new RuntimeException("如果使用CURD，请设置实体类路径：.setEntityLocation(\"\")");
@@ -180,11 +180,11 @@ public class DBDToCurd {
             if (DBDToBeanUtils.isNotEmpty(DBDToBeanContext.getDbdToMVCDefinition().getEntityLocation())) {
                 this.createImport(content, entityName);
                 if (DBDToBeanUtils.isNotEmpty(importBeanName)) {
-                    this.createQueryById(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("query").append(entityName).append("ById(id);\n\t}\n\n");
+                    this.createQueryById(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("query").append(entityName).append("ById(").append(DBDToBeanUtils.firstCharToLowerCase(entityName)).append(");\n\t}\n\n");
                     this.createQuery(content, entityName).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("query").append(entityName).append("List();\n\t}\n\n");
-                    this.createInsert(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("insert").append(entityName).append("(" + DBDToBeanUtils.firstCharToLowerCase(entityName) + ");\n\t}\n\n");
-                    this.createUpdate(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("update").append(entityName).append("(" + DBDToBeanUtils.firstCharToLowerCase(entityName) + ");\n\t}\n\n");
-                    this.createDelete(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("delete").append(entityName).append("ById(id);\n\t}\n\n");
+                    this.createInsert(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("insert").append(entityName).append("(").append(DBDToBeanUtils.firstCharToLowerCase(entityName)).append(");\n\t}\n\n");
+                    this.createUpdate(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("update").append(entityName).append("(").append(DBDToBeanUtils.firstCharToLowerCase(entityName)).append(");\n\t}\n\n");
+                    this.createDelete(content, entityName, false).append(" {\n\t\treturn ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(".").append("delete").append(entityName).append("ById(").append(DBDToBeanUtils.firstCharToLowerCase(entityName)).append(");\n\t}\n\n");
                 } else {
                     this.createQueryById(content, entityName, false).append(" {\n\t\treturn null;\n\t}\n\n");
                     this.createQuery(content, entityName).append(" {\n\t\treturn null;\n\t}\n\n");

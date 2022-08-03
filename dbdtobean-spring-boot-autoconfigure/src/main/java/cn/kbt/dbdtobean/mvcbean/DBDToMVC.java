@@ -72,7 +72,7 @@ public class DBDToMVC implements IDBDToMVC {
             DBDToMapper dbdToMapper = new DBDToMapper();
             for (DBDToBeanDefinition definition : definitions) {
                 dbdToMapper.mapperInterfaces(definition.getCreateBeanName());
-                dbdToMapper.mapperXML(definition.getCreateBeanName());
+                dbdToMapper.mapperXML(definition.getCreateBeanName(), definition.getTableName());
             }
         }
     }

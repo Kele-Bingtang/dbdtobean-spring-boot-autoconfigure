@@ -3,7 +3,6 @@ package cn.kbt.dbdtobean.core;
 import cn.kbt.dbdtobean.comment.HeadComment;
 import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Kele-Bing
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
  * 定义信息类
  */
 @ConfigurationProperties(prefix = "dbdtobean.base", ignoreInvalidFields = true)
-@Component("dBDToBeanDefinition")
 public class DBDToBeanDefinition {
     /**
      * 开头类路径
@@ -50,6 +48,10 @@ public class DBDToBeanDefinition {
      * 类注释，无法设置
      **/
     private HeadComment headComment;
+    /**
+     * 表名，无法设置
+     */
+    private String tableName;
 
 
     public String getCreateBeanName() {
@@ -98,6 +100,14 @@ public class DBDToBeanDefinition {
 
     public void setDateBaseType(String dateBaseType) {
         this.dateBaseType = dateBaseType;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     public String getPackageName() {

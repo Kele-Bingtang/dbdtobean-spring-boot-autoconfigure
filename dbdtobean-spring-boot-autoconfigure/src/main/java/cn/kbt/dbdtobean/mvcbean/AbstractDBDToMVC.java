@@ -182,13 +182,13 @@ public abstract class AbstractDBDToMVC {
                 content.append(DBDToBeanContext.getDbdToBeanDefinition().getHeadComment().generateHeadComments(DBDToBeanContext.getDbdToBeanProperties().getAuthorName()).toString());
             }
             if (definition.isMvcAnnotation()) {
-                content.insert(content.indexOf(";") + 1, "import org.springframework.stereotype." + mvcAnnotation.substring(1) + ";");
-                content.append(mvcAnnotation).append("\n");
+                // 添加 Controller 的注解
+                this.addControllerAnnotation(content);
+                content.append(mvcAnnotation).append("\n").append("@RequestMapping(\"").append("/").append(DBDToBeanUtils.firstCharToLowerCase(createBeanName)).append("\")").append("\n");
             }
             content.append("public class ").append(createClassName).append(" {\n\n");
             if (DBDToBeanUtils.isNotEmpty(DBDToBeanContext.getDbdToMVCDefinition().getServiceLocation())) {
                 importBeanName = parseMVCName(DBDToBeanContext.getDbdToMVCDefinition(), createBeanName, DBDToService.SERVICE_IMPL_NAME);
-                // String serviceName = DBDToBeanUtils.firstCharToUpperCase(entityName) + DBDToService.SERVICE_IMPL_NAME;
                 content.insert(content.indexOf(";") + 1, "\nimport " + DBDToBeanContext.getDbdToMVCDefinition().getServiceLocation() + "." + IMPL_NAME + "." + importBeanName + ";\nimport org.springframework.beans.factory.annotation.Autowired;\n");
                 content.append("\t@Autowired\n\tprivate ").append(importBeanName).append(" ").append(DBDToBeanUtils.firstCharToLowerCase(importBeanName)).append(";\n\n");
             }
@@ -264,6 +264,18 @@ public abstract class AbstractDBDToMVC {
                 return definition.getPrefix() + definition.getMapperXmlPre() + createBeanName + definition.getMapperXmlSuf() + definition.getSuffix();
         }
         return createBeanName;
+    }
+
+    /**
+     * 添加 Controller 的通用注解
+     * @param content 内容
+     */
+    public void addControllerAnnotation(StringBuilder content) {
+        content.insert(content.indexOf(";") + 1, "\nimport org.springframework.web.bind.annotation." + mvcAnnotation.substring(1) + ";");
+        content.insert(content.indexOf(";") + 1, "\nimport org.springframework.web.bind.annotation.GetMapping;");
+        content.insert(content.indexOf(";") + 1, "\nimport org.springframework.web.bind.annotation.PostMapping;");
+        content.insert(content.indexOf(";") + 1, "\nimport org.springframework.web.bind.annotation.RequestBody;");
+        content.insert(content.indexOf(";") + 1, "\nimport org.springframework.web.bind.annotation.RequestMapping;");
     }
 
 }

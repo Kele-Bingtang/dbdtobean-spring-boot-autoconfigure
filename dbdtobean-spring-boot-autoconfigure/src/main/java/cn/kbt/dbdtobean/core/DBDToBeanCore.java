@@ -16,7 +16,7 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
     /**
      * 数据库信息
      **/
-    private ResultSetMetaData JDBCData = null;
+    private ResultSetMetaData jdbcData = null;
     /**
      * 生成的文件名字
      **/
@@ -45,10 +45,11 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
             System.out.println("请输入要导出的表名或者数据库名");
             return null;
         }
-        PreparedStatement stmt = getConnection().prepareStatement("select * from " + tableName);
+        Connection connection = getConnection();
+        PreparedStatement stmt = connection.prepareStatement("select * from " + tableName);
         ResultSet rs = stmt.executeQuery();
         //通过结果集获取数据库信息
-        JDBCData = rs.getMetaData();
+        jdbcData = rs.getMetaData();
         // 核心，存储JavaBean文件内容的缓冲区
         StringBuilder sb = new StringBuilder();
         // 判断使用什么数据库
@@ -91,11 +92,11 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
      */
     private void createField(StringBuilder sb, ResultSet columnsInfo) throws SQLException {
         sb.append("public class ").append(createBeanName).append(" {\n");
-        for (int i = 1; i <= JDBCData.getColumnCount(); i++) {
+        for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
             //添加自定义注释，长度不满足则生成规定的注释
-            DBDToBeanContext.getCustomComment().customFiledComment(sb, columnsInfo, parseFieldName(JDBCData.getColumnName(i)) + "：", i);
-            sb.append("\tprivate ").append(fieldType(JDBCData.getColumnClassName(i)))
-                    .append(" ").append(parseFieldName(JDBCData.getColumnName(i))).append(";").append("\n");
+            DBDToBeanContext.getCustomComment().customFiledComment(sb, columnsInfo, parseFieldName(jdbcData.getColumnName(i)) + "：", i);
+            sb.append("\tprivate ").append(fieldType(jdbcData.getColumnClassName(i)))
+                    .append(" ").append(parseFieldName(jdbcData.getColumnName(i))).append(";").append("\n");
         }
         sb.append("}");
     }
@@ -118,16 +119,16 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
             //是否生成有参构造器注释，没有自定义注释则生成规定的注释
             DBDToBeanContext.getCustomComment().customConstructComment(sb, false);
             sb.append("\tpublic ").append(createBeanName).append("(");
-            for (int i = 1; i <= JDBCData.getColumnCount(); i++) {
-                sb.append(fieldType(JDBCData.getColumnClassName(i))).append(" ")
-                        .append(parseFieldName(JDBCData.getColumnName(i))).append(", ");
+            for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
+                sb.append(fieldType(jdbcData.getColumnClassName(i))).append(" ")
+                        .append(parseFieldName(jdbcData.getColumnName(i))).append(", ");
             }
             // 把最后的", "和去掉
             sb.setLength(sb.length() - 2);
             sb.append(") {\n");
-            for (int i = 1; i <= JDBCData.getColumnCount(); i++) {
-                sb.append("\t\tthis.").append(parseFieldName(JDBCData.getColumnName(i))).append(" = ")
-                        .append(parseFieldName(JDBCData.getColumnName(i))).append(";\n");
+            for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
+                sb.append("\t\tthis.").append(parseFieldName(jdbcData.getColumnName(i))).append(" = ")
+                        .append(parseFieldName(jdbcData.getColumnName(i))).append(";\n");
             }
             sb.append("\t}").append("\n}");
         }
@@ -146,9 +147,9 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
             //去掉 } 和换行
             sb.setLength(sb.length() - 2);
             sb.append("\n\n");
-            for (int i = 1; i <= JDBCData.getColumnCount(); i++) {
-                String columnName = JDBCData.getColumnName(i);
-                String columnClassName = JDBCData.getColumnClassName(i);
+            for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
+                String columnName = jdbcData.getColumnName(i);
+                String columnClassName = jdbcData.getColumnClassName(i);
                 //是否生成get注释，没有自定义注释则生成规定的注释
                 DBDToBeanContext.getCustomComment().customSetGetComment(sb, columnsInfo, parseFieldName(columnName), i, false);
                 String setAndGetContent = DBDToBeanUtils.isTwoCharUpper(parseFieldName(columnName)) ? parseFieldName(columnName) : DBDToBeanUtils.firstCharToUpperCase(parseFieldName(columnName));
@@ -183,8 +184,8 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
             sb.append("\t@Override\n\t").append("public String toString(){\n\t\t").append("return \"")
                     .append(createBeanName).append(" {\" + ")
                     .append("\n\t\t\t\t");
-            for (int i = 1; i <= JDBCData.getColumnCount(); i++) {
-                String columns = JDBCData.getColumnName(i);
+            for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
+                String columns = jdbcData.getColumnName(i);
                 sb.append("\", ").append(parseFieldName(columns)).append("='\"").append(" + ")
                         .append(parseFieldName(columns)).append(" + '\\'' + ").append("\n\t\t\t\t");
             }
@@ -348,9 +349,9 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
      */
     private StringBuilder addJarPackage(StringBuilder sb) throws SQLException {
         if (DBDToBeanContext.getDbdToBeanDefinition().isJarPackage()) {
-            for (int i = 1; i <= JDBCData.getColumnCount(); i++) {
-                if (!JDBCData.getColumnClassName(i).startsWith("java.lang") && sb.indexOf(JDBCData.getColumnClassName(i)) == -1) {
-                    sb.append("\n").append("import ").append(JDBCData.getColumnClassName(i)).append(";");
+            for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
+                if (!jdbcData.getColumnClassName(i).startsWith("java.lang") && sb.indexOf(jdbcData.getColumnClassName(i)) == -1) {
+                    sb.append("\n").append("import ").append(jdbcData.getColumnClassName(i)).append(";");
                 }
             }
             sb.append("\n");
@@ -367,7 +368,7 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
      * @return 内容
      */
     private DBDToBeanDefinition parseBeanName(DBDToBeanDefinition definition, String tableName) {
-        //文件名首字母大写或者小写，如果Oracle表，先转小写，再将首字母大写
+        // 文件名首字母大写或者小写，如果Oracle表，先转小写，再将首字母大写
         if (definition.isBeanFirstNameUp()) {
             definition.setCreateBeanName(DBDToBeanUtils.firstCharToUpperCase(tableName.toLowerCase()));
         } else {
@@ -376,7 +377,8 @@ public abstract class DBDToBeanCore implements IDBDToBeanCore {
         definition.setCreateBeanName(DBDToBeanUtils._CharToUpperCase(definition.getCreateBeanName()));
         createBeanName = definition.getCreateBeanName();
         DBDToBeanDefinition dbdToBeanDefinition = new DBDToBeanDefinition();
-        dbdToBeanDefinition.setCreateBeanName(definition.getCreateBeanName());
+        dbdToBeanDefinition.setCreateBeanName(createBeanName);
+        dbdToBeanDefinition.setTableName(tableName);
         return dbdToBeanDefinition;
     }
 

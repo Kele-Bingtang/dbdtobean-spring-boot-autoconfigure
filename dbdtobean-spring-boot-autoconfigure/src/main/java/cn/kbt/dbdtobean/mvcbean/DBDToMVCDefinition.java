@@ -2,7 +2,6 @@ package cn.kbt.dbdtobean.mvcbean;
 
 import cn.kbt.dbdtobean.core.DBDToBeanContext;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Kele-Bing
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
  * @since 2021/9/22 19:15
  */
 @ConfigurationProperties(prefix = "dbdtobean.mvc", ignoreInvalidFields = true)
-@Component("dBDToMVCDefinition")
 public class DBDToMVCDefinition {
     /**
      * Controller位置
