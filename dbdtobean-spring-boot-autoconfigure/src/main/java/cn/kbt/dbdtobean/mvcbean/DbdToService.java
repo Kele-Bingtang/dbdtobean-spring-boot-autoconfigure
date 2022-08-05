@@ -1,16 +1,16 @@
 package cn.kbt.dbdtobean.mvcbean;
 
-import cn.kbt.dbdtobean.core.DBDToBeanContext;
-import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
+import cn.kbt.dbdtobean.core.DbdToBeanContext;
+import cn.kbt.dbdtobean.utils.BeanUtils;
 
 import java.io.IOException;
 
 /**
  * @author Kele-Bing
- * @version 1.0
+ * @version 1.6
  * @since 2021/9/21 21:45
  */
-public class DBDToService extends AbstractDBDToMVC {
+public class DbdToService extends AbstractDbdToMVC {
     /**
      * Service接口基础名
      **/
@@ -31,8 +31,8 @@ public class DBDToService extends AbstractDBDToMVC {
      * @throws IOException IO 异常
      */
     public String serviceInterfaces(String createBeanName) throws IOException {
-        createBeanName = DBDToBeanUtils._CharToUpperCase(createBeanName);
-        DBDToMVCDefinition definition = DBDToBeanContext.getDbdToMVCDefinition();
+        createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
+        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
         interfacesName = super.createInterfaces(definition, createBeanName, SERVICE_INTERFACE_NAME);
         return interfacesName;
     }
@@ -44,8 +44,8 @@ public class DBDToService extends AbstractDBDToMVC {
      * @throws IOException IO 异常
      */
     public String serviceBean(String createBeanName) throws IOException {
-        createBeanName = DBDToBeanUtils._CharToUpperCase(createBeanName);
-        DBDToMVCDefinition definition = DBDToBeanContext.getDbdToMVCDefinition();
+        createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
+        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
         return super.createBean(definition, createBeanName, SERVICE_IMPL_NAME, interfacesName);
     }
 }

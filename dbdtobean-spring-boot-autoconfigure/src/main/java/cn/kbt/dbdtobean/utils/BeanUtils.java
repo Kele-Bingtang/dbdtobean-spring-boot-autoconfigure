@@ -1,6 +1,9 @@
 package cn.kbt.dbdtobean.utils;
 
 
+import cn.kbt.dbdtobean.core.DbdToBeanContext;
+import cn.kbt.dbdtobean.core.DbdToBeanDefinition;
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +11,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class DBDToBeanUtils {
+/**
+ * @author Kele-Bing
+ * @since 2022-35-06 00:35:43
+ * @version 1.6 
+ * 工具类
+*/
+public class BeanUtils {
     /**
      * 关闭资源
      * @param rs 结果集
@@ -28,31 +37,19 @@ public class DBDToBeanUtils {
     }
 
     /**
-     * 关闭资源
-     * @param rs 结果集
-     * @param pstmt PreparedStatement 对象
-     * @param conn 数据库连接对象
+     * 内容是否为空
+     * @param content 内容
+     * @return true：为空，false：不为空
      */
-    public static void close(ResultSet rs, PreparedStatement pstmt, Connection conn) {
-        try {
-            if (null != rs) {
-                rs.close();
-            }
-            if (null != pstmt) {
-                pstmt.close();
-            }
-            if (null != conn) {
-                conn.close();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
     public static boolean isEmpty(Object content){
-        return content == null || content.equals("");
+        return null == content  || "".equals(content);
     }
 
+    /**
+     * 内容是否为空
+     * @param content 内容
+     * @return true：不为空，false：为空
+     */
     public static boolean isNotEmpty(Object content){
         return !isEmpty(content);
     }
@@ -62,7 +59,7 @@ public class DBDToBeanUtils {
      * @param name 字符串
      * @return 字符串
      */
-    public static String _CharToUpperCase(String name) {
+    public static String underlineToUpperCase(String name) {
         StringBuilder charUpper = new StringBuilder();
         String[] splitName = name.split("_");
         charUpper.append(splitName[0]);
@@ -171,8 +168,7 @@ public class DBDToBeanUtils {
      * @return 当前时间
      */
     public static String getCurrentTime(){
-        Date date = new Date();
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        return getCurrentTime("yyyy-MM-dd HH:mm:ss");
     }
 
     /**
@@ -195,6 +191,26 @@ public class DBDToBeanUtils {
     }
 
     /**
+     * 判断大小写
+     * 返回不同的参数
+     *
+     * @param content 内容
+     * @return 内容
+     */
+    public static String parseFieldName(String content) {
+        DbdToBeanDefinition definition = DbdToBeanContext.getDbdToBeanDefinition();
+        if (definition.isFieldNameAllLower() && definition.isLowerCamelCase()) {
+            return BeanUtils.underlineToUpperCase(content.toLowerCase());
+        } else if ((definition.isFieldNameAllLower())) {
+            return content.toLowerCase();
+        } else if (definition.isLowerCamelCase()) {
+            return BeanUtils.underlineToUpperCase(content);
+        } else {
+            return content;
+        }
+    }
+
+    /**
      * 获取Mysql的数据库源对象
      * @param driverName 驱动
      * @param url 地址
@@ -202,7 +218,7 @@ public class DBDToBeanUtils {
      * @param password 数据库密码
      * @return 连接对象
      */
-    public static Connection getMysqlConnection(String driverName, String url, String username, String password) {
+    public static Connection getConnection(String driverName, String url, String username, String password) {
         Connection conn = null;
         try {
             Class.forName(driverName);
@@ -217,26 +233,48 @@ public class DBDToBeanUtils {
     }
 
     /**
-     * 获取Oracle的数据库源对象
-     * @param driverName 驱动
-     * @param url 地址
-     * @param username 数据库用户名
-     * @param password 数据库密码
-     * @return 连接对象
+     * 获取 \n，根据传入的数量返回相应的 \n
+     * @param nNum \n 的数量
+     * @return nNum 数量的 \n
      */
-    public static Connection getOracleConnection(String driverName, String url, String username, String password) {
-        Connection conn = null;
-        try {
-            Class.forName(driverName);
-            // conn = DriverManager.getConnection("jdbc:oracle:thin:@112.74.169.231:1521:orcl", userName, passWord);
-            conn = DriverManager.getConnection(url, username, password);
-            if (null == conn) {
-                throw new RuntimeException("数据库连接失败");
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+    public static String getN(int nNum) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < nNum; i++) {
+            sb.append("\n");
         }
-        return conn;
+        return sb.toString();
+    }
+
+    /**
+     * 获取 \t，根据传入的数量返回相应的 \t
+     * @param tNum \t 的数量
+     * @return tNum 数量的 \t
+     */
+    public static String getT(int tNum) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tNum; i++) {
+            sb.append("\t");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 获取 \n 和 \t，根据传入的数量返回相应的 \n 和 \t
+     * @param nNum \n 的数量
+     * @param tNum \t 的数量
+     * @return nNum 数量的 \n 加上 tNum 数量的 \t
+     */
+    public static String getNT(int nNum, int tNum) {
+        return getN(nNum) + getT(tNum);
+    }
+
+    /**
+     * 用 "" 将 content 包围起来
+     * @param content 内容
+     * @return "" 包围的 content
+     */
+    public static String addColon(String content) {
+        return "\"" + content + "\"";
     }
 
     /**
@@ -301,5 +339,4 @@ public class DBDToBeanUtils {
             System.out.println("获得列" + i + "能否出现在where中:" + isSearchable);
         }
     }
-
 }

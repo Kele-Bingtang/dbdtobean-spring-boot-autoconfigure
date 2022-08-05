@@ -1,7 +1,7 @@
 package cn.kbt.dbdtobean.comment;
 
-import cn.kbt.dbdtobean.core.DBDToBeanContext;
-import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
+import cn.kbt.dbdtobean.core.DbdToBeanContext;
+import cn.kbt.dbdtobean.utils.BeanUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,19 +9,19 @@ import java.util.List;
 
 /**
  * @author Kele-Bing
- * @version 1.0
+ * @version 1.6
  * @since 2021/9/19 15:01
  * 自定义注释类
  */
 public class CustomComment extends AbstractComment {
 
-    private final static String NULL_CONSTRUCTOR = "无参构造器";
-    private final static String PARAM_CONSTRUCTOR = "有参构造器，进行属性值的初始化";
-    private final static String SET = "设置 ";
-    private final static String GET = "获取 ";
-    private final static String REMARKS = "REMARKS";
-    private final static String FIELD_NAME = " 的属性值";
-    private final static String TO_STRING = "重写toString方法，使用该方法可以在控制台打印属性的数据";
+    private static final String NULL_CONSTRUCTOR = "无参构造器";
+    private static final String PARAM_CONSTRUCTOR = "有参构造器，进行属性值的初始化";
+    private static final String SET = "设置「";
+    private static final String GET = "获取」";
+    private static final String REMARKS = "REMARKS";
+    private static final String FIELD_NAME = "「的属性值";
+    private static final String TO_STRING = "重写 toString 方法，使用该方法可以在控制台打印属性的数据";
     /**
      * JavaBean内容的自定义注释
      */
@@ -99,18 +99,17 @@ public class CustomComment extends AbstractComment {
         自定义属性注释
     */
     public StringBuilder customFiledComment(StringBuilder sb, ResultSet columnsInfo, String content, int i) throws SQLException {
-        if (DBDToBeanContext.getCustomComment().getFiledComment() != null && DBDToBeanContext.getCustomComment().getFiledComment().size() >= i) {
-            if (DBDToBeanUtils.isNotEmpty(columnsInfo)) {
+        if (DbdToBeanContext.getCustomComment().getFiledComment() != null && DbdToBeanContext.getCustomComment().getFiledComment().size() >= i) {
+            if (BeanUtils.isNotEmpty(columnsInfo)) {
                 columnsInfo.next();
             }
             //解析注释类型，生成不同类型的注释
-            super.parseCommentType(sb, DBDToBeanContext.getCustomComment().getFiledComment().get(i - 1));
+            super.parseCommentType(sb, DbdToBeanContext.getCustomComment().getFiledComment().get(i - 1));
         } else {  //没有自定义注释，获取数据库的注释
-            if (DBDToBeanContext.getDefaultComment().isFieldComment()) {
-                if (DBDToBeanUtils.isNotEmpty(columnsInfo)) {
-                    columnsInfo.next();
+            if (DbdToBeanContext.getDefaultComment().isFieldComment()) {
+                if (BeanUtils.isNotEmpty(columnsInfo) && columnsInfo.next()) {
                     //获取数据库的注释
-                    if (DBDToBeanUtils.isNotEmpty(columnsInfo.getString(REMARKS))) {
+                    if (BeanUtils.isNotEmpty(columnsInfo.getString(REMARKS))) {
                         super.parseCommentType(sb, columnsInfo.getString(REMARKS));
                     } else {  //没有自定义注释，数据库的字段没有注释，生成规定的注释
                         //解析注释类型，生成不同类型的注释
@@ -129,20 +128,20 @@ public class CustomComment extends AbstractComment {
          自定义构造器注释
      */
     public StringBuilder customConstructComment(StringBuilder sb, boolean nullConstruct) {
-        CustomComment customComment = DBDToBeanContext.getCustomComment();
+        CustomComment customComment = DbdToBeanContext.getCustomComment();
         if (nullConstruct) {
             //是否生成无参构造器注释，没有自定义注释则生成规定的注释
-            if (DBDToBeanContext.getDefaultComment().isConstructorComment()) {
-                if (DBDToBeanUtils.isNotEmpty(customComment.getNullConstructorComment())) {
-                    super.parseCommentType(sb, DBDToBeanContext.getCustomComment().getNullConstructorComment());
+            if (DbdToBeanContext.getDefaultComment().isConstructorComment()) {
+                if (BeanUtils.isNotEmpty(customComment.getNullConstructorComment())) {
+                    super.parseCommentType(sb, DbdToBeanContext.getCustomComment().getNullConstructorComment());
                 } else {
                     super.parseCommentType(sb, NULL_CONSTRUCTOR);
                 }
             }
         } else {
             //是否生成有参构造器注释，没有自定义注释则生成规定的注释
-            if (DBDToBeanContext.getDefaultComment().isConstructorComment()) {
-                if (DBDToBeanUtils.isNotEmpty(customComment.getParamConstructorComment())) {
+            if (DbdToBeanContext.getDefaultComment().isConstructorComment()) {
+                if (BeanUtils.isNotEmpty(customComment.getParamConstructorComment())) {
                     super.parseCommentType(sb, customComment.getParamConstructorComment());
                 } else {
                     super.parseCommentType(sb, PARAM_CONSTRUCTOR);
@@ -156,11 +155,11 @@ public class CustomComment extends AbstractComment {
         自定义setter和getter注释
     */
     public StringBuilder customSetGetComment(StringBuilder sb, ResultSet columns, String content, int i, boolean set) throws SQLException {
-        CustomComment customComment = DBDToBeanContext.getCustomComment();
+        CustomComment customComment = DbdToBeanContext.getCustomComment();
         //是否生成set注释，没有自定义注释则生成规定的注释
-        if (DBDToBeanUtils.isNotEmpty(customComment.getGetComment()) && customComment.getGetComment().size() >= i) {
+        if (BeanUtils.isNotEmpty(customComment.getGetComment()) && customComment.getGetComment().size() >= i) {
             if (set) {
-                if (DBDToBeanUtils.isNotEmpty(columns)) {
+                if (BeanUtils.isNotEmpty(columns)) {
                     columns.next();
                 }
             }
@@ -177,14 +176,14 @@ public class CustomComment extends AbstractComment {
     */
     private void generateSetGetComment(StringBuilder sb, ResultSet columns, boolean set, String fieldName) throws SQLException {
         String setGetString = GET;
-        if (DBDToBeanContext.getDefaultComment().isSetAndGetComment()) {
-            if (DBDToBeanUtils.isNotEmpty(columns)) {
+        if (DbdToBeanContext.getDefaultComment().isSetAndGetComment()) {
+            if (BeanUtils.isNotEmpty(columns)) {
                 if (!set) {
                     columns.next();
                 } else {
                     setGetString = SET;
                 }
-                if (DBDToBeanUtils.isNotEmpty(columns.getString(REMARKS))) {
+                if (BeanUtils.isNotEmpty(columns.getString(REMARKS))) {
                     super.parseCommentType(sb, setGetString + columns.getString(REMARKS) + FIELD_NAME);
                 } else {
                     super.parseCommentType(sb, setGetString + fieldName + FIELD_NAME);
@@ -199,9 +198,9 @@ public class CustomComment extends AbstractComment {
          自定义toString注释
     */
     public StringBuilder customToString(StringBuilder sb) throws SQLException {
-        if (DBDToBeanContext.getDefaultComment().isToStringComment()) {
-            if (DBDToBeanUtils.isNotEmpty(DBDToBeanContext.getCustomComment().getToStringComment())) {
-                super.parseCommentType(sb, DBDToBeanContext.getCustomComment().getToStringComment());
+        if (DbdToBeanContext.getDefaultComment().isToStringComment()) {
+            if (BeanUtils.isNotEmpty(DbdToBeanContext.getCustomComment().getToStringComment())) {
+                super.parseCommentType(sb, DbdToBeanContext.getCustomComment().getToStringComment());
             } else {
                 super.parseCommentType(sb, TO_STRING);
             }

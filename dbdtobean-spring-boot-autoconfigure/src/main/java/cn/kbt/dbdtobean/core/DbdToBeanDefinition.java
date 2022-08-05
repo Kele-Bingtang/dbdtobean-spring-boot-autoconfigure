@@ -1,17 +1,17 @@
 package cn.kbt.dbdtobean.core;
 
 import cn.kbt.dbdtobean.comment.HeadComment;
-import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
+import cn.kbt.dbdtobean.utils.BeanUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author Kele-Bing
  * @since  2021/9/20 11:38
- * @version  1.0
+ * @version 1.6
  * 定义信息类
  */
 @ConfigurationProperties(prefix = "dbdtobean.base", ignoreInvalidFields = true)
-public class DBDToBeanDefinition {
+public class DbdToBeanDefinition {
     /**
      * 开头类路径
      **/
@@ -35,7 +35,7 @@ public class DBDToBeanDefinition {
     /**
      * 去掉下划线后的首字母大写
      **/
-    private boolean _ToUpper = false;
+    private boolean lowerCamelCase = false;
     /**
      * 数据库类型
      **/
@@ -86,12 +86,12 @@ public class DBDToBeanDefinition {
         this.fieldNameAllLower = fieldNameAllLower;
     }
 
-    public boolean is_ToUpper() {
-        return _ToUpper;
+    public boolean isLowerCamelCase() {
+        return lowerCamelCase;
     }
 
-    public void set_ToUpper(boolean _ToUpper) {
-        this._ToUpper = _ToUpper;
+    public void setLowerCamelCase(boolean lowerCamelCase) {
+        this.lowerCamelCase = lowerCamelCase;
     }
 
     public String getDateBaseType() {
@@ -111,8 +111,8 @@ public class DBDToBeanDefinition {
     }
 
     public String getPackageName() {
-        if (DBDToBeanUtils.isNotEmpty(DBDToBeanContext.getDbdToMVCDefinition().getEntityLocation())) {
-            return DBDToBeanContext.getDbdToMVCDefinition().getEntityLocation();
+        if (BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMVCDefinition().getEntityLocation())) {
+            return DbdToBeanContext.getDbdToMVCDefinition().getEntityLocation();
         }
         if (packageName == null) {
             return "";

@@ -1,6 +1,6 @@
 package cn.kbt.dbdtobean.config;
 
-import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
+import cn.kbt.dbdtobean.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,13 +8,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.sql.Connection;
 
 @ConfigurationProperties(prefix = "dbdtobean", ignoreInvalidFields = true)
-@ConditionalOnClass(DBDToBeanDataSource.class)
-public class DBDToBeanProperties {
+@ConditionalOnClass(DbdToBeanDataSource.class)
+public class DbdToBeanProperties {
     /**
      * 适配Springboot的数据库配置
      **/
     @Autowired
-    DBDToBeanDataSource dataSource;
+    DbdToBeanDataSource dataSource;
     /**
      * 数据库源对象
      **/
@@ -44,19 +44,19 @@ public class DBDToBeanProperties {
      **/
     private String authorName = System.getenv().get("USERNAME");
 
-    public DBDToBeanProperties() {
+    public DbdToBeanProperties() {
     }
 
     public Connection getConn() {
         if (conn == null) {
             if (dateBaseType.equals("MySQL")) {
-                if (DBDToBeanUtils.isNotEmpty(driverName) && DBDToBeanUtils.isNotEmpty(url) && DBDToBeanUtils.isNotEmpty(username) && DBDToBeanUtils.isNotEmpty(password)) {
-                    conn = DBDToBeanUtils.getMysqlConnection(driverName, url, username, password);
-                } else if (DBDToBeanUtils.isNotEmpty(dataSource.getDriverClassName()) && DBDToBeanUtils.isNotEmpty(dataSource.getUrl()) && DBDToBeanUtils.isNotEmpty(dataSource.getUsername()) && DBDToBeanUtils.isNotEmpty(dataSource.getPassword())) {
-                    conn = DBDToBeanUtils.getMysqlConnection(dataSource.getDriverClassName(), dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword());
+                if (BeanUtils.isNotEmpty(driverName) && BeanUtils.isNotEmpty(url) && BeanUtils.isNotEmpty(username) && BeanUtils.isNotEmpty(password)) {
+                    conn = BeanUtils.getConnection(driverName, url, username, password);
+                } else if (BeanUtils.isNotEmpty(dataSource.getDriverClassName()) && BeanUtils.isNotEmpty(dataSource.getUrl()) && BeanUtils.isNotEmpty(dataSource.getUsername()) && BeanUtils.isNotEmpty(dataSource.getPassword())) {
+                    conn = BeanUtils.getConnection(dataSource.getDriverClassName(), dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword());
                 }
             } else if (dateBaseType.equals("Oracle")) {
-                conn = DBDToBeanUtils.getOracleConnection(driverName, url, username, password);
+                conn = BeanUtils.getConnection(driverName, url, username, password);
             }
         }
         return conn;
@@ -107,7 +107,7 @@ public class DBDToBeanProperties {
     }
 
     public String getAuthorName() {
-        if (DBDToBeanUtils.isEmpty(authorName)) {
+        if (BeanUtils.isEmpty(authorName)) {
             return "";
         }
         return authorName;

@@ -3,7 +3,7 @@ package cn.kbt.dbdtobean.log;
 /**
  * @author Kele-Bing
  * @since  2021/9/25 16:46
- * @version 1.0
+ * @version 1.6
  * API文档
  */
 public class DBDToBeanAPI {

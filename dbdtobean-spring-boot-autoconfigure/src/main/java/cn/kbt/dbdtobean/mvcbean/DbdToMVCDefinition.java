@@ -1,15 +1,15 @@
 package cn.kbt.dbdtobean.mvcbean;
 
-import cn.kbt.dbdtobean.core.DBDToBeanContext;
+import cn.kbt.dbdtobean.core.DbdToBeanContext;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author Kele-Bing
- * @version 1.0
+ * @version 1.6
  * @since 2021/9/22 19:15
  */
 @ConfigurationProperties(prefix = "dbdtobean.mvc", ignoreInvalidFields = true)
-public class DBDToMVCDefinition {
+public class DbdToMVCDefinition {
     /**
      * Controller位置
      **/
@@ -114,11 +114,14 @@ public class DBDToMVCDefinition {
      * 是否生成MVC注解
      **/
     private boolean mvcAnnotation = true;
-
     /**
      * 是否生成 @RequestBody 注解
      */
     private boolean generateRequestBody = true;
+    /**
+     * Mapper.xml 的一行字段数
+     */
+    private int columnNum = 6;
 
     public String getControllerLocation() {
         return controllerLocation;
@@ -342,15 +345,23 @@ public class DBDToMVCDefinition {
         this.generateRequestBody = generateRequestBody;
     }
 
+    public int getColumnNum() {
+        return columnNum;
+    }
+
+    public void setColumnNum(int columnNum) {
+        this.columnNum = columnNum;
+    }
+
     /**
      * 获取Maven或者普通目录
      * @return Maven 结构还是普通 Java 结构
      */
     public String getMavenOrSimple() {
         if (mavenOrSimple) {
-            return AbstractDBDToMVC.MAVEN_HONE;
+            return AbstractDbdToMVC.MAVEN_HONE;
         } else {
-            return AbstractDBDToMVC.SIMPLE_HONE;
+            return AbstractDbdToMVC.SIMPLE_HONE;
         }
     }
 
@@ -360,12 +371,11 @@ public class DBDToMVCDefinition {
      */
     public String getMapperPath() {
         if (mavenOrSimple) {
-            return DBDToMapper.MAVEN_MAPPER_XML_HONE;
+            return DbdToMapper.MAVEN_MAPPER_XML_HONE;
         } else {
-            DBDToMVCDefinition dbdToMVCDefinition = DBDToBeanContext.getDbdToMVCDefinition();
+            DbdToMVCDefinition dbdToMVCDefinition = DbdToBeanContext.getDbdToMVCDefinition();
             dbdToMVCDefinition.setMapperXmlLocation(dbdToMVCDefinition.getMapperLocation());
-            return DBDToMapper.SIMPLE_MAPPER_XML_HONE;
+            return DbdToMapper.SIMPLE_MAPPER_XML_HONE;
         }
     }
-
 }

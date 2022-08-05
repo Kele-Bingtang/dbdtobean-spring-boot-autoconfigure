@@ -2,7 +2,7 @@ package cn.kbt.dbdtobean.comment;
 
 /**
  * @author Kele-Bing
- * @version 1.0
+ * @version 1.6
  * @since 2021/9/20 17:33
  * 抽象注释类
  */

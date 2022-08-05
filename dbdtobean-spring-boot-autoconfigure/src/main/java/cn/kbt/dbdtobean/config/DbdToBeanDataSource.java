@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 读取 Spring Boot 配置文件的数据库信息
  */
 @ConfigurationProperties(prefix = "spring.datasource", ignoreInvalidFields = true)
-public class DBDToBeanDataSource {
+public class DbdToBeanDataSource {
     /**
      * 数据库驱动
      **/

@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author Kele-Bing
- * @version 1.0
+ * @version 1.6
  * 默认注释类
  * @since 2021/9/19 15:10
  */

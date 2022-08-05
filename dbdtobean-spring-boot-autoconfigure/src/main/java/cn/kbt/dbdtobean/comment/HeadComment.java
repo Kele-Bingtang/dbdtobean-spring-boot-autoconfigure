@@ -1,18 +1,18 @@
 package cn.kbt.dbdtobean.comment;
 
-import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
+import cn.kbt.dbdtobean.utils.BeanUtils;
 
 
 /**
  * @author Kele-Bing
- * @version 1.0
+ * @version 1.6
  * @since 2021/9/20 17:27
  * 类注释信息
  */
 public class HeadComment extends AbstractComment {
     private String author = "@author ";
     private String createTime = "@since ";
-    private String version = "@version 1.0";
+    private String version = "@version 1.6";
     private String describe = " ";
     private StringBuilder headComments = null;
 
@@ -87,7 +87,7 @@ public class HeadComment extends AbstractComment {
         this.headComments.setLength(0);
         this.headComments.append("/**\n * ")
                 .append(this.author).append(author)
-                .append("\n * ").append(this.createTime).append(DBDToBeanUtils.getCurrentTime())
+                .append("\n * ").append(this.createTime).append(BeanUtils.getCurrentTime())
                 .append("\n * ").append(this.version)
                 .append("\n * ").append(this.describe)
                 .append("\n */\n");

@@ -1,16 +1,16 @@
 package cn.kbt.dbdtobean.mvcbean;
 
-import cn.kbt.dbdtobean.core.DBDToBeanContext;
-import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
+import cn.kbt.dbdtobean.core.DbdToBeanContext;
+import cn.kbt.dbdtobean.utils.BeanUtils;
 
 import java.io.IOException;
 
 /**
  * @author Kele-Bing
- * @since  2021/9/21 21:18
- * @version  1.0
+ * @since 2021/9/21 21:18
+ * @version 1.6
  */
-public class DBDToController extends AbstractDBDToMVC {
+public class DbdToController extends AbstractDbdToMVC {
     /**
      * Controller名
      **/
@@ -24,8 +24,8 @@ public class DBDToController extends AbstractDBDToMVC {
      * @throws IOException IO 异常
      */
     public String controllerBean(String createBeanName) throws IOException {
-        createBeanName = DBDToBeanUtils._CharToUpperCase(createBeanName);
-        DBDToMVCDefinition definition = DBDToBeanContext.getDbdToMVCDefinition();
+        createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
+        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
         return super.createBean(definition, createBeanName, CONTROLLER_NAME, null);
     }
 

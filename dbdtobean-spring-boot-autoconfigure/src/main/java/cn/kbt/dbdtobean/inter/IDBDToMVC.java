@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * @author Kele-Bing
  * @since  2021/9/21 21:50
- * @version  1.0
+ * @version 1.6
  * MVC接口
  */
 public interface IDBDToMVC {

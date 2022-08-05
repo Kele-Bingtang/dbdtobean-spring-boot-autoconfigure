@@ -1,16 +1,16 @@
 package cn.kbt.dbdtobean.mvcbean;
 
-import cn.kbt.dbdtobean.core.DBDToBeanContext;
-import cn.kbt.dbdtobean.utils.DBDToBeanUtils;
+import cn.kbt.dbdtobean.core.DbdToBeanContext;
+import cn.kbt.dbdtobean.utils.BeanUtils;
 
 import java.io.IOException;
 
 /**
  * @author Kele-Bing
- * @version 1.0
+ * @version 1.6
  * @since 2021/9/21 22:50
  */
-public class DBDToDao extends AbstractDBDToMVC {
+public class DbdToDao extends AbstractDbdToMVC {
     /**
      * Dao层接口基础名
      **/
@@ -32,8 +32,8 @@ public class DBDToDao extends AbstractDBDToMVC {
      * @throws IOException IO 异常
      */
     public String daoInterfaces(String createBeanName) throws IOException {
-        createBeanName = DBDToBeanUtils._CharToUpperCase(createBeanName);
-        DBDToMVCDefinition definition = DBDToBeanContext.getDbdToMVCDefinition();
+        createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
+        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
         InterfacesName = super.createInterfaces(definition, createBeanName, DAO_INTERFACE_NAME);
         return InterfacesName;
     }
@@ -46,8 +46,8 @@ public class DBDToDao extends AbstractDBDToMVC {
      * @throws IOException IO 异常
      */
     public String daoBean(String createBeanName) throws IOException {
-        createBeanName = DBDToBeanUtils._CharToUpperCase(createBeanName);
-        DBDToMVCDefinition definition = DBDToBeanContext.getDbdToMVCDefinition();
+        createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
+        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
         return super.createBean(definition, createBeanName, DAO_IMPL_NAME, InterfacesName);
     }
 

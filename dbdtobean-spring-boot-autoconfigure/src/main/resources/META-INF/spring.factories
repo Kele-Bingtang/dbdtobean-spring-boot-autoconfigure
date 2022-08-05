@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.kbt.dbdtobean.config.DBDtoBeanConfiguration
+  cn.kbt.dbdtobean.config.DbdToBeanConfiguration
