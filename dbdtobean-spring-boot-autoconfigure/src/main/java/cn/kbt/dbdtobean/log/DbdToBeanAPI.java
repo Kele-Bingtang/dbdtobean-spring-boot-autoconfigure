@@ -4,11 +4,15 @@ package cn.kbt.dbdtobean.log;
  * @author Kele-Bing
  * @since  2021/9/25 16:46
  * @version 1.6
- * API文档
+ * API 文档
  */
-public class DBDToBeanAPI {
+public class DbdToBeanAPI {
 
-    public String dbdToBeanEntityAPI(){
+    /**
+     * 单个 Java Bean 实体类生成文档
+     * @return API 文档
+     */
+    public String dbdToBeanEntityApi(){
         return "\tString driverName = \"\";\n" +
                 "\tString url = \"\";\n" +
                 "\tString username = \"\";\n" +
@@ -24,12 +28,16 @@ public class DBDToBeanAPI {
                 "\tdbdToBean.setCommentType(\"/*\"); // 三种注释类型：//  /*  /**\n" +
                 "\tdbdToBean.setBeanFirstNameIsUp(true); // 文件名首字母大写\n" +
                 "dbdToBean.setEntityLocation(\"cn.kbt.bean\"); // 实体类的包名，不填写，则默认生成在桌面" +
-                "\tString beanContent = dbdToBean.generateAttrFromTable(\"表名\"); // 生成实体类内容\n" +
+                "\tString beanContent = dbdToBean.createBeanFromTable(\"表名\"); // 生成实体类内容\n" +
                 "\tString createPath = dbdToBean.exportToFile(beanContent); // 导出到实体类文件\n" +
                 "\tdbdToBean.closeConnection(); // 关闭数据库";
     }
 
-    public String dbdToBeanEntityListAPI(){
+    /**
+     * 多个 Java Bean 实体类生成文档
+     * @return API 文档
+     */
+    public String dbdToBeanEntityListApi(){
         return "\tString driverName = \"\";\n" +
                 "\tString url = \"\";\n" +
                 "\tString username = \"\";\n" +
@@ -45,12 +53,16 @@ public class DBDToBeanAPI {
                 "\tdbdToBean.setCommentType(\"/*\"); // 注释类型：//  /*  /**\n" +
                 "\tdbdToBean.setBeanFirstNameIsUp(true); // 文件名首字母大写\n" +
                 "dbdToBean.setEntityLocation(\"cn.kbt.bean\"); // 实体类的包名，不填写，则默认生成在桌面" +
-                "\tHashMap<String, String> beanContents = dbdToBean.generateAttrFromDataBase(); // 读取 url 里数据库的所有表\n" +
+                "\tHashMap<String, String> beanContents = dbdToBean.createBeanFromDataBase(); // 读取 url 里数据库的所有表\n" +
                 "\tString createPath = dbdToBean.exportToFile(beanContents); // 导出到实体类文件\n" +
                 "\tdbdToBean.closeConnection(); // 关闭数据库";
     }
 
-    public String dbdToBeanMVCAPI(){
+    /**
+     * Java Bean、Mapper、Service、Controller 生成文档
+     * @return API 文档
+     */
+    public String dbdToBeanMvcApi(){
         return "\tConnection connection = DBDToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
                 "\tDBDToBean dbdToBean = new DBDToBean();\n" +
                 "\tdbdToBean.setConnection(connection);\n" +
@@ -68,12 +80,16 @@ public class DBDToBeanAPI {
                 "\tdbdToBean.setMapperLocation(\"cn.kbt.mapper\"); // Mapper 的全类名，与 Dao 二选一\n" +
                 "\tdbdToBean.setEntityLocation(\"cn.kbt.bean\"); // 实体类的包名，不填写，默认生成在桌面\n" +
                 "\tdbdToBean.setGenerateCURD(true); // 生成增删改查的基础方法\n" +
-                "\tHashMap<String, String> map = dbdToBean.generateAttrFromDataBase(); // 读取 url 里数据库的所有表\n" +
+                "\tHashMap<String, String> map = dbdToBean.createBeanFromDataBase(); // 读取 url 里数据库的所有表\n" +
                 "\tdbdToBean.exportToFile(map); // 导出到文件\n" +
                 "\tdbdToBean.closeConnection(); // 关闭数据库";
     }
 
-    public String dbdToBeanCustomerMVCAPI(){
+    /**
+     * Java Bean、Mapper、Service、Controller 自定义生成文档
+     * @return API 文档
+     */
+    public String dbdToBeanCustomerMvcApi(){
         return "\tConnection connection = DBDToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
                 "\tDBDToBean dbdToBean = new DBDToBean();\n" +
                 "\tdbdToBean.setConnection(connection);\n" +
@@ -107,12 +123,16 @@ public class DBDToBeanAPI {
                 "\tdbdToBean.setMapperInterSuf(\"li\"); // Mapper 接口类文件名添加前后缀\n" +
                 "\tdbdToBean.setMapperXmlPre(\"yin\"); // Mapper xml 文件名添加前前缀\n" +
                 "\tdbdToBean.setMapperXmlSuf(\"ju\"); // Mapper xml 文件名添加前后缀\n" +
-                "\tHashMap<String, String> map = dbdToBean.generateAttrFromDataBase();\n" +
+                "\tHashMap<String, String> map = dbdToBean.createBeanFromDataBase();\n" +
                 "\tdbdToBean.exportToFile(map);\n" +
                 "\tdbdToBean.closeConnection();";
     }
-    
-    public String applicationAPI(){
+
+    /**
+     * application.properties 配置文件的文档
+     * @return API 文档
+     */
+    public String applicationApi(){
         return "dbdtobean:\n" +
                 "  author-name: kele   # 作者名\n" +
                 "  driver-name: com.mysql.cj.jdbc.Driver    # 驱动\n" +

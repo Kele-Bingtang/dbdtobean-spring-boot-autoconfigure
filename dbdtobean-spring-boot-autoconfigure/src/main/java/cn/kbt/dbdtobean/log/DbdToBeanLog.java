@@ -32,8 +32,12 @@ package cn.kbt.dbdtobean.log;
  * startTime : 2022/3/11/10:22:35
  * endTime : 2022/3/12/0:31:55
  */
-public class DBDToBeanLog {
-
+public class DbdToBeanLog {
+    
+    /**
+     * 版本日志
+     * @return 版本日志
+     */
     public String logInfo(){
         return "V1.0(2021/6/28/20:18:52 - 2021/7/1/16:48:01)\n" +
                 "实现了数据库的表自动生成JavaBean文件的基本功能\n" +

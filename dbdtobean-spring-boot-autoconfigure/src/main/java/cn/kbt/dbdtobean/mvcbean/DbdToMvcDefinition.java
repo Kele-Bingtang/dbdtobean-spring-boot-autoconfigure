@@ -9,25 +9,25 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 2021/9/22 19:15
  */
 @ConfigurationProperties(prefix = "dbdtobean.mvc", ignoreInvalidFields = true)
-public class DbdToMVCDefinition {
+public class DbdToMvcDefinition {
     /**
-     * Controller位置
+     * Controller 位置
      **/
     private String controllerLocation = null;
     /**
-     * Service位置
+     * Service 位置
      **/
     private String serviceLocation = null;
     /**
-     * Dao位置
+     * Dao 位置
      **/
     private String daoLocation = null;
     /**
-     * Mapper位置
+     * Mapper 位置
      **/
     private String mapperLocation = null;
     /**
-     * Mapper的xml位置
+     * Mapper 的 xml 位置
      **/
     private String mapperXmlLocation = "mapper";
     /**
@@ -39,59 +39,59 @@ public class DbdToMVCDefinition {
      **/
     private String suffix = "";
     /**
-     * Controller文件前缀
+     * Controller 文件前缀
      **/
     private String controllerPre = "";
     /**
-     * Controller文件后缀
+     * Controller 文件后缀
      **/
     private String controllerSuf = "Controller";
     /**
-     * Service接口文件前缀
+     * Service 接口文件前缀
      **/
     private String serviceInterPre = "";
     /**
-     * Service接口文件后缀
+     * Service 接口文件后缀
      **/
     private String serviceInterSuf = "Service";
     /**
-     * Service实现文件前缀
+     * Service 实现文件前缀
      **/
     private String serviceImplPre = "";
     /**
-     * Service实现文件后缀
+     * Service 实现文件后缀
      **/
     private String serviceImplSuf = "ServiceImpl";
     /**
-     * Dao接口文件前缀
+     * Dao 接口文件前缀
      **/
     private String daoInterPre = "";
     /**
-     * Dao接口文件后缀
+     * Dao 接口文件后缀
      **/
     private String daoInterSuf = "Dao";
     /**
-     * Dao实现文件前缀
+     * Dao 实现文件前缀
      **/
     private String daoImplPre = "";
     /**
-     * Dao实现文件后缀
+     * Dao 实现文件后缀
      **/
     private String daoImplSuf = "DaoImpl";
     /**
-     * Mapper接口文件前缀
+     * Mapper 接口文件前缀
      **/
     private String mapperInterPre = "";
     /**
-     * Mapper接口文件后缀
+     * Mapper 接口文件后缀
      **/
     private String mapperInterSuf = "Mapper";
     /**
-     * Mapper的xml文件前缀
+     * Mapper 的 xml 文件前缀
      **/
     private String mapperXmlPre = "";
     /**
-     * Mapper的xml文件后缀
+     * Mapper 的 xml 文件后缀
      **/
     private String mapperXmlSuf = "Mapper";
     /**
@@ -103,21 +103,25 @@ public class DbdToMVCDefinition {
      **/
     private String modulesName = null;
     /**
-     * 是否生成CURD
+     * 是否生成 CURD
      **/
-    private boolean generatecurd = false;
+    private boolean generateCurd = false;
     /**
-     * maven目录或普通目录
+     * maven 目录或普通目录
      **/
     private boolean mavenOrSimple = true;
     /**
-     * 是否生成MVC注解
+     * 是否生成 MVC 注解
      **/
     private boolean mvcAnnotation = true;
     /**
      * 是否生成 @RequestBody 注解
      */
     private boolean generateRequestBody = true;
+    /**
+     * 是否生成开启 Swagger 注解
+     */
+    private boolean startSwagger = false;
     /**
      * Mapper.xml 的一行字段数
      */
@@ -313,12 +317,12 @@ public class DbdToMVCDefinition {
         this.modulesName = modulesName;
     }
 
-    public boolean isGeneratecurd() {
-        return generatecurd;
+    public boolean isGenerateCurd() {
+        return generateCurd;
     }
 
-    public void setGeneratecurd(boolean generatecurd) {
-        this.generatecurd = generatecurd;
+    public void setGenerateCurd(boolean generateCurd) {
+        this.generateCurd = generateCurd;
     }
 
     public boolean isMavenOrSimple() {
@@ -353,8 +357,16 @@ public class DbdToMVCDefinition {
         this.columnNum = columnNum;
     }
 
+    public boolean isStartSwagger() {
+        return startSwagger;
+    }
+
+    public void setStartSwagger(boolean startSwagger) {
+        this.startSwagger = startSwagger;
+    }
+
     /**
-     * 获取Maven或者普通目录
+     * 获取 Maven 或者普通目录
      * @return Maven 结构还是普通 Java 结构
      */
     public String getMavenOrSimple() {
@@ -366,15 +378,15 @@ public class DbdToMVCDefinition {
     }
 
     /**
-     * 获取Mapper的xml路径
+     * 获取 Mapper 的 xml 路径
      * @return Mapper 的 XML 路径
      */
-    public String getMapperPath() {
+    protected String getMapperPath() {
         if (mavenOrSimple) {
             return DbdToMapper.MAVEN_MAPPER_XML_HONE;
         } else {
-            DbdToMVCDefinition dbdToMVCDefinition = DbdToBeanContext.getDbdToMVCDefinition();
-            dbdToMVCDefinition.setMapperXmlLocation(dbdToMVCDefinition.getMapperLocation());
+            DbdToMvcDefinition dbdToMvcDefinition = DbdToBeanContext.getDbdToMvcDefinition();
+            dbdToMvcDefinition.setMapperXmlLocation(dbdToMvcDefinition.getMapperLocation());
             return DbdToMapper.SIMPLE_MAPPER_XML_HONE;
         }
     }

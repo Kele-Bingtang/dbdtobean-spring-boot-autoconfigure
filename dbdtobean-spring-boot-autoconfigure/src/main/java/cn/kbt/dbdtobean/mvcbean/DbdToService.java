@@ -2,6 +2,8 @@ package cn.kbt.dbdtobean.mvcbean;
 
 import cn.kbt.dbdtobean.core.DbdToBeanContext;
 import cn.kbt.dbdtobean.utils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -11,41 +13,45 @@ import java.io.IOException;
  * @since 2021/9/21 21:45
  */
 public class DbdToService extends AbstractDbdToMVC {
+    private static final Logger logger = LoggerFactory.getLogger(DbdToService.class);
     /**
-     * Service接口基础名
+     * Service 接口基础名
      **/
-    protected final static String SERVICE_INTERFACE_NAME = "Service";
+    protected static final String SERVICE_INTERFACE_NAME = "Service";
     /**
-     * Service实现类基础名
+     * Service 实现类基础名
      **/
-    protected final static String SERVICE_IMPL_NAME = "ServiceImpl";
+    protected static final String SERVICE_IMPL_NAME = "ServiceImpl";
     /**
-     * Service接口完整名
+     * Service 接口完整名
      **/
     protected static String interfacesName = null;
 
     /**
-     * 生成Service接口内容
+     * 生成 Service 接口内容
+     *
      * @param createBeanName 文件名
-     * @return 接口名
      * @throws IOException IO 异常
      */
-    public String serviceInterfaces(String createBeanName) throws IOException {
+    protected void serviceInterfaces(String createBeanName) throws IOException {
+        logger.info("开始生成 {} 的 Service 接口内容", createBeanName);
         createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
-        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
+        DbdToMvcDefinition definition = DbdToBeanContext.getDbdToMvcDefinition();
         interfacesName = super.createInterfaces(definition, createBeanName, SERVICE_INTERFACE_NAME);
-        return interfacesName;
+        logger.info("生成 {} 的 Service 接口内容完成", createBeanName);
     }
 
     /**
-     * 生成Service实现类内容
+     * 生成 Service 实现类内容
+     *
      * @param createBeanName 文件名
-     * @return 内容
      * @throws IOException IO 异常
      */
-    public String serviceBean(String createBeanName) throws IOException {
+    protected void serviceBean(String createBeanName) throws IOException {
+        logger.info("开始生成 {} 的 Service 实现类内容", createBeanName);
         createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
-        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
-        return super.createBean(definition, createBeanName, SERVICE_IMPL_NAME, interfacesName);
+        DbdToMvcDefinition definition = DbdToBeanContext.getDbdToMvcDefinition();
+        super.createBean(definition, createBeanName, SERVICE_IMPL_NAME, interfacesName);
+        logger.info("生成 {} 的 Service 实现类内容完成", createBeanName);
     }
 }

@@ -2,6 +2,8 @@ package cn.kbt.dbdtobean.mvcbean;
 
 import cn.kbt.dbdtobean.core.DbdToBeanContext;
 import cn.kbt.dbdtobean.utils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -11,22 +13,23 @@ import java.io.IOException;
  * @version 1.6
  */
 public class DbdToController extends AbstractDbdToMVC {
+    private static final Logger logger = LoggerFactory.getLogger(DbdToController.class);
     /**
-     * Controller名
+     * Controller 名
      **/
-    protected final static String CONTROLLER_NAME = "Controller";
+    protected static final String CONTROLLER_NAME = "Controller";
 
     /**
-     * 创建Controller层以及文件内容
+     * 创建 Controller 层以及文件内容
      *
      * @param createBeanName 文件名
-     * @return 内容
      * @throws IOException IO 异常
      */
-    public String controllerBean(String createBeanName) throws IOException {
+    protected void controllerBean(String createBeanName) throws IOException {
+        logger.info("开始生成 {} 的 Controller 层以及文件内容", createBeanName);
         createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
-        DbdToMVCDefinition definition = DbdToBeanContext.getDbdToMVCDefinition();
-        return super.createBean(definition, createBeanName, CONTROLLER_NAME, null);
+        DbdToMvcDefinition definition = DbdToBeanContext.getDbdToMvcDefinition();
+        super.createBean(definition, createBeanName, CONTROLLER_NAME, null);
+        logger.info("生成 {} 的 Controller 层以及文件内容完成", createBeanName);
     }
-
 }

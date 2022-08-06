@@ -15,7 +15,7 @@ public class DbdToBeanDefinition {
     /**
      * 开头类路径
      **/
-    private final static String PACKAGE = "package ";
+    private static final String PACKAGE = "package ";
     /**
      * 生成的文件名
      **/
@@ -25,11 +25,11 @@ public class DbdToBeanDefinition {
      **/
     private boolean beanFirstNameUp = true;
     /**
-     * 是否导入文件需要的jar包
+     * 是否导入文件需要的 jar 包
      **/
     private boolean jarPackage = true;
     /**
-     * 数据库生成的JavaBean内容属性值是否保持一样或者小写
+     * 数据库生成的 JavaBean 内容属性值是否保持一样或者小写
      **/
     private boolean fieldNameAllLower = false;
     /**
@@ -111,8 +111,8 @@ public class DbdToBeanDefinition {
     }
 
     public String getPackageName() {
-        if (BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMVCDefinition().getEntityLocation())) {
-            return DbdToBeanContext.getDbdToMVCDefinition().getEntityLocation();
+        if (BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMvcDefinition().getEntityLocation())) {
+            return DbdToBeanContext.getDbdToMvcDefinition().getEntityLocation();
         }
         if (packageName == null) {
             return "";
@@ -125,7 +125,7 @@ public class DbdToBeanDefinition {
     }
 
     public String setThenGetPackageName(String packageName) {
-        return PACKAGE + packageName + ";\n";
+        return PACKAGE + packageName + ";" + BeanUtils.getN(1);
     }
 
     public HeadComment getHeadComment() {
@@ -140,7 +140,7 @@ public class DbdToBeanDefinition {
     }
 
     public void setPackageNameAndJarPackage(String packageName, boolean jarPackage) {
-        this.packageName = PACKAGE + packageName + ";\n";
+        this.packageName = PACKAGE + packageName + ";" + BeanUtils.getN(1);
         this.jarPackage = jarPackage;
     }
 

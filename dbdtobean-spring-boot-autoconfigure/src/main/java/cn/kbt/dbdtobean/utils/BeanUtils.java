@@ -3,12 +3,13 @@ package cn.kbt.dbdtobean.utils;
 
 import cn.kbt.dbdtobean.core.DbdToBeanContext;
 import cn.kbt.dbdtobean.core.DbdToBeanDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.security.SecureRandom;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -18,6 +19,14 @@ import java.util.Random;
  * 工具类
 */
 public class BeanUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(BeanUtils.class);
+    private static final Random RANDOM;
+    
+    static {
+        RANDOM = new SecureRandom();
+    }
+    
     /**
      * 关闭资源
      * @param rs 结果集
@@ -133,9 +142,9 @@ public class BeanUtils {
     }
 
     /**
-     * 如果字符串第二个位置的字母为大写，则返回true，反之false
-     * 符合set和get方法，生成set和get为：settTs(){}  gettTs(){}
-     * 而不是 setTTs(){}  getTTs(){}
+     * 如果字符串第二个位置的字母为大写，则返回 true，反之 false
+     * 符合 setter 和 getter 方法，生成 setter 和 getter 为：settTs(){}、gettTs(){}
+     * 而不是 setTTs(){}、getTTs(){}
      * @param content 字符串
      * @return boolean
      */
@@ -147,20 +156,12 @@ public class BeanUtils {
     }
 
     /**
-     * 0-1000随机数字，生成文件名
+     * 0-1000 随机数字，生成文件名
      * @return 文件名
      */
     public static int randomNum() {
-        //随机数字，生成文件名
-        List<Integer> randomNum = new ArrayList<Integer>();
-        int nextInt = new Random().nextInt(1000);
-        for (Integer i : randomNum) {
-            if (i == nextInt) {
-                return randomNum();
-            }
-        }
-        randomNum.add(nextInt);
-        return nextInt;
+        // 随机数字，生成文件名
+        return RANDOM.nextInt(1000);
     }
 
     /**
@@ -211,7 +212,7 @@ public class BeanUtils {
     }
 
     /**
-     * 获取Mysql的数据库源对象
+     * 获取 Mysql 的数据库源对象
      * @param driverName 驱动
      * @param url 地址
      * @param username 数据库用户名
@@ -223,9 +224,6 @@ public class BeanUtils {
         try {
             Class.forName(driverName);
             conn = DriverManager.getConnection(url, username, password);
-            if (null == conn) {
-                throw new RuntimeException("数据库连接失败");
-            }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -320,23 +318,23 @@ public class BeanUtils {
             boolean isReadOnly = data.isReadOnly(i);
             // 能否出现在where中
             boolean isSearchable = data.isSearchable(i);
-            System.out.println(columnCount);
-            System.out.println("获得列" + i + "的字段名称:" + columnName);
-            System.out.println("获得列" + i + "的类型,返回SqlType中的编号:" + columnType);
-            System.out.println("获得列" + i + "的数据类型名:" + columnTypeName);
-            System.out.println("获得列" + i + "所在的Catalog名字:" + catalogName);
-            System.out.println("获得列" + i + "对应数据类型的类:" + columnClassName);
-            System.out.println("获得列" + i + "在数据库中类型的最大字符个数:" + columnDisplaySize);
-            System.out.println("获得列" + i + "的默认的列的标题:" + columnLabel);
-            System.out.println("获得列" + i + "的所在的表名:" + tableName);
-            System.out.println("获得列" + i + "的模式:" + schemaName);
-            System.out.println("获得列" + i + "类型的精确度(类型的长度):" + precision);
-            System.out.println("获得列" + i + "小数点后的位数:" + scale);
-            System.out.println("获得列" + i + "是否自动递增:" + isAutoInctement);
-            System.out.println("获得列" + i + "在数据库中是否为货币型:" + isCurrency);
-            System.out.println("获得列" + i + "是否为空:" + isNullable);
-            System.out.println("获得列" + i + "是否为只读:" + isReadOnly);
-            System.out.println("获得列" + i + "能否出现在where中:" + isSearchable);
+            logger.info("获得所有列的数目及实际列数：{}", columnCount);
+            logger.info("获得列 {} 的字段名称：{}", i, columnName);
+            logger.info("获得列 {} 的类型,返回 SqlType 中的编号：{}", i, columnType);
+            logger.info("获得列 {} 的数据类型名：{}", i, columnTypeName);
+            logger.info("获得列 {} 的所在的 Catalog 名字：{}", i, catalogName);
+            logger.info("获得列 {} 的对应数据类型的 java类：{}", i, columnClassName);
+            logger.info("获得列 {} 的在数据库中类型的最大字符个数：{}", i, columnDisplaySize);
+            logger.info("获得列 {} 的默认的列的标题：{}", i, columnLabel);
+            logger.info("获得列 {} 的所在的表名：{}", i, tableName);
+            logger.info("获得列 {} 的所在的模式名：{}", i, schemaName);
+            logger.info("获得列 {} 的精确度（类型的长度）：{}", i, precision);
+            logger.info("获得列 {} 的小数点后的位数：{}", i, scale);
+            logger.info("获得列 {} 是否自动递增：{}", i, isAutoInctement);
+            logger.info("获得列 {} 是否为货币型：{}", i, isCurrency);
+            logger.info("获得列 {} 是否为空：{}", i, isNullable);
+            logger.info("获得列 {} 是否为只读：{}", i, isReadOnly);
+            logger.info("获得列 {} 是否能出现在where中：{}", i, isSearchable);
         }
     }
 }

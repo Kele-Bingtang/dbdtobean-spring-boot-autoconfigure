@@ -11,7 +11,7 @@ import java.sql.Connection;
 @ConditionalOnClass(DbdToBeanDataSource.class)
 public class DbdToBeanProperties {
     /**
-     * 适配Springboot的数据库配置
+     * 适配 Spring Boot 的数据库配置
      **/
     @Autowired
     DbdToBeanDataSource dataSource;
@@ -43,9 +43,6 @@ public class DbdToBeanProperties {
      * 作者
      **/
     private String authorName = System.getenv().get("USERNAME");
-
-    public DbdToBeanProperties() {
-    }
 
     public Connection getConn() {
         if (conn == null) {

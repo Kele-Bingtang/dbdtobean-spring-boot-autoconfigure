@@ -28,11 +28,11 @@ public class DefaultComment {
      **/
     private boolean constructorComment = false;
     /**
-     * 是否生成setter和getter注释
+     * 是否生成 setter 和 getter 注释
      **/
     private boolean setAndGetComment = false;
     /**
-     * 是否生成toString注释
+     * 是否生成 toString 注释
      **/
     private boolean toStringComment = false;
 

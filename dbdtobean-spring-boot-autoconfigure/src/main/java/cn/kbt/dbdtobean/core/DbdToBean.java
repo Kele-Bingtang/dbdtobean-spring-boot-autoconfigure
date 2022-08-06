@@ -2,20 +2,28 @@ package cn.kbt.dbdtobean.core;
 
 
 import cn.kbt.dbdtobean.config.DbdToBeanProperties;
-import cn.kbt.dbdtobean.log.DBDToBeanAPI;
-import cn.kbt.dbdtobean.log.DBDToBeanLog;
+import cn.kbt.dbdtobean.log.DbdToBeanAPI;
+import cn.kbt.dbdtobean.log.DbdToBeanLog;
 import cn.kbt.dbdtobean.mvcbean.AbstractDbdToMVC;
-import cn.kbt.dbdtobean.mvcbean.DbdToMVC;
-import cn.kbt.dbdtobean.mvcbean.DbdToMVCDefinition;
+import cn.kbt.dbdtobean.mvcbean.DbdToMvc;
+import cn.kbt.dbdtobean.mvcbean.DbdToMvcDefinition;
 import cn.kbt.dbdtobean.utils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class DbdToBean extends DbdToBeanCore {
+
+    private static final Logger logger = LoggerFactory.getLogger(DbdToBean.class);
 
     private boolean isMultimediaContent = false;
 
@@ -40,21 +48,20 @@ public class DbdToBean extends DbdToBeanCore {
     public void setCreateBeanName(String createBeanName) {
         DbdToBeanContext.getDbdToBeanDefinition().setCreateBeanName(createBeanName);
     }
-    @Override
-    public String generateAttrFromTable(String tableName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException {
-        return super.generateAttrFromTable(tableName, isConstructor, isSetAndGet, isToString);
+    public String createBeanFromTable(String tableName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException {
+        return super.createBeanFromTable(tableName, isConstructor, isSetAndGet, isToString);
     }
 
-    public String generateAttrFromTable(String tableName) throws SQLException {
-        return generateAttrFromTable(tableName, true, true, true);
+    public String createBeanFromTable(String tableName) throws SQLException {
+        return createBeanFromTable(tableName, true, true, true);
     }
 
-    public String generateAttrFromTable(String tableName, boolean isConstructor) throws SQLException {
-        return generateAttrFromTable(tableName, isConstructor, true, true);
+    public String createBeanFromTable(String tableName, boolean isConstructor) throws SQLException {
+        return createBeanFromTable(tableName, isConstructor, true, true);
     }
 
-    public String generateAttrFromTable(String tableName, boolean isConstructor, boolean isSetAndGet) throws SQLException {
-        return generateAttrFromTable(tableName, isConstructor, isSetAndGet, true);
+    public String createBeanFromTable(String tableName, boolean isConstructor, boolean isSetAndGet) throws SQLException {
+        return createBeanFromTable(tableName, isConstructor, isSetAndGet, true);
     }
 
     public void setPackageName(String packageName) {
@@ -117,16 +124,16 @@ public class DbdToBean extends DbdToBeanCore {
         setComment(DbdToBeanContext.getDefaultComment().isFieldComment(), DbdToBeanContext.getDefaultComment().isConstructorComment(), isSetAndGetComment, DbdToBeanContext.getDefaultComment().isToStringComment());
     }
 
-    public void setSetAndGetComment(List<String> SetComment, List<String> GetComment) {
-        DbdToBeanContext.getCustomComment().setSetAndGetComment(SetComment,GetComment);
+    public void setSetAndGetComment(List<String> setterComment, List<String> getterComment) {
+        DbdToBeanContext.getCustomComment().setSetAndGetComment(setterComment,getterComment);
     }
 
-    public void setSetComment(List<String> SetComment) {
-        DbdToBeanContext.getCustomComment().setSetComment(SetComment);
+    public void setSetComment(List<String> setterComment) {
+        DbdToBeanContext.getCustomComment().setSetterComment(setterComment);
     }
 
-    public void setGetComment(List<String> GetComment) {
-        DbdToBeanContext.getCustomComment().setGetComment(GetComment);
+    public void setGetComment(List<String> getterComment) {
+        DbdToBeanContext.getCustomComment().setGetterComment(getterComment);
     }
 
     public void setToStringComment(boolean isToStringComment) {
@@ -145,99 +152,103 @@ public class DbdToBean extends DbdToBeanCore {
         DbdToBeanContext.getDbdToBeanDefinition().setFieldNameAllLower(fieldNameAllLower);
     }
 
-    public void generateAttrFromDataBase(boolean fieldNameAllLower) throws SQLException, IOException {
+    public void createBeanFromDataBase(boolean fieldNameAllLower) throws SQLException, IOException {
         DbdToBeanContext.getDbdToBeanDefinition().setFieldNameAllLower(fieldNameAllLower);
-        generateAttrFromDataBase(null, true, true, true);
+        createBeanFromDataBase(null, true, true, true);
     }
 
-    public HashMap<String, String> generateAttrFromDataBase() throws SQLException, IOException {
-        return generateAttrFromDataBase(getConnection().getCatalog(), true, true, true);
+    public Map<String, String> createBeanFromDataBase() throws SQLException, IOException {
+        return createBeanFromDataBase(getConnection().getCatalog(), true, true, true);
     }
 
-    public HashMap<String, String> generateAttrFromDataBase(String dateBaseName) throws SQLException, IOException {
-        return generateAttrFromDataBase(dateBaseName, true, true, true);
+    public Map<String, String> createBeanFromDataBase(String dateBaseName) throws SQLException, IOException {
+        return createBeanFromDataBase(dateBaseName, true, true, true);
     }
 
-    public HashMap<String, String> generateAttrFromDataBase(String dateBaseName, boolean isConstructor) throws SQLException, IOException {
-        return generateAttrFromDataBase(dateBaseName, isConstructor, true, true);
+    public Map<String, String> createBeanFromDataBase(String dateBaseName, boolean isConstructor) throws SQLException, IOException {
+        return createBeanFromDataBase(dateBaseName, isConstructor, true, true);
     }
 
-    public HashMap<String, String> generateAttrFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet) throws SQLException, IOException {
-        return generateAttrFromDataBase(dateBaseName, isConstructor, isSetAndGet, true);
+    public Map<String, String> createBeanFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet) throws SQLException, IOException {
+        return createBeanFromDataBase(dateBaseName, isConstructor, isSetAndGet, true);
     }
-    @Override
-    public HashMap<String, String> generateAttrFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException, IOException {
-        return super.generateAttrFromDataBase(dateBaseName, isConstructor, isSetAndGet, isToString);
+    
+    public HashMap<String, String> createBeanFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException, IOException {
+        return super.createBeanFromDataBase(dateBaseName, isConstructor, isSetAndGet, isToString);
     }
 
     public String exportToFile(String fileContent) throws IOException {
         String createPath = exportToFile(fileContent, null, null);
-        System.out.println("创建【" + DbdToBeanContext.getDbdToBeanDefinition().getCreateBeanName() + "】文件成功，位于：" + new File(createPath).getAbsolutePath());
+        logger.info("创建 {} 实体类成功，位于：{}", DbdToBeanContext.getDbdToBeanDefinition().getCreateBeanName(), new File(createPath).getAbsolutePath());
         return createPath;
     }
 
     public String exportToFile(String fileContent, String path) throws IOException {
         String createPath = exportToFile(fileContent, path, null);
-        System.out.println("创建【" + DbdToBeanContext.getDbdToBeanDefinition().getCreateBeanName() + "】文件成功，位于：" + new File(createPath).getAbsolutePath());
+        logger.info("创建 {} 实体类成功，位于：{}", DbdToBeanContext.getDbdToBeanDefinition().getCreateBeanName(), new File(createPath).getAbsolutePath());
         return createPath;
     }
-    @Override
+    
     public String exportToFile(String fileContent, String path, String dirName) throws IOException {
         if(!isMultimediaContent){
             if(BeanUtils.isEmpty(path)){
-                if(BeanUtils.isEmpty(dirName) && BeanUtils.isEmpty(DbdToBeanContext.getDbdToMVCDefinition().getEntityLocation())){
-                    System.out.println("正在【电脑桌面】路径下为您创建【JavaBean文件】" );
-                }else if(BeanUtils.isEmpty(DbdToBeanContext.getDbdToMVCDefinition().getEntityLocation())){
-                    System.out.println("正在【电脑桌面】路径下的【" + dirName + "】文件夹里为您创建【JavaBean文件】" );
+                if(BeanUtils.isEmpty(dirName) && BeanUtils.isEmpty(DbdToBeanContext.getDbdToMvcDefinition().getEntityLocation())){
+                    logger.info("正在「电脑桌面」路径下为您创建「JavaBean 文件」");
+                }else if(BeanUtils.isEmpty(DbdToBeanContext.getDbdToMvcDefinition().getEntityLocation())){
+                    logger.info("正在「电脑桌面」路径下的 {} 文件夹里为您创建「JavaBean 文件」", dirName);
                 }
             }else if(BeanUtils.isEmpty(dirName)){
-                System.out.println("正在【" + path + "】路径下为您创建【JavaBean文件】" );
+                logger.info("正在 {} 路径下为您创建「JavaBean 文件」", path);
             }else {
-                System.out.println("正在【" + path + "】路径下的【" + dirName + "】文件夹里为您创建【JavaBean文件】" );
+                logger.info("正在 {} 路径下的 {} 文件夹里为您创建「JavaBean 文件」", path, dirName);
             }
         }
         String createPath = super.exportToFile(fileContent, path, dirName);
-        DbdToMVC dbdToMVC = new DbdToMVC();
-        dbdToMVC.dbdToMVC();
+        DbdToMvc dbdToMVC = new DbdToMvc();
+        dbdToMVC.dbdToMvc();
         return createPath;
     }
 
-    public String exportToFile(HashMap<String,String> fileContentMap) throws IOException, SQLException {
+    public String exportToFile(Map<String,String> fileContentMap) throws IOException, SQLException {
         return this.exportToFile(fileContentMap,null,null);
     }
 
-    public String exportToFile(HashMap<String,String> fileContentMap, String path) throws IOException, SQLException {
+    public String exportToFile(Map<String,String> fileContentMap, String path) throws IOException, SQLException {
         return this.exportToFile(fileContentMap,path,null);
     }
 
-    public String exportToFile(HashMap<String,String> fileContentMap, String path, String dirName) throws IOException, SQLException {
+    public String exportToFile(Map<String,String> fileContentMap, String path, String dirName) throws IOException, SQLException {
         isMultimediaContent = true;
         String createPath = "";
-        System.out.println("系统检测到提供的数据库共有【" + fileContentMap.size() + "】个表，准备生成文件");
-        if ((BeanUtils.isEmpty(dirName) || dirName.equals(" ")) && BeanUtils.isEmpty(path)) {
-            // 默认生成一个文件夹，以数据库名字+随机数字为文件夹名
-            if(BeanUtils.isEmpty(DbdToBeanContext.getDbdToMVCDefinition().getEntityLocation())){
+        logger.info("系统检测到提供的数据库共有 {} 个表，准备生成文件", fileContentMap.size());
+        if ((BeanUtils.isEmpty(dirName) || " ".equals(dirName)) && BeanUtils.isEmpty(path)) {
+            // 默认生成一个文件夹，以数据库名字 + 随机数字为文件夹名
+            if(BeanUtils.isEmpty(DbdToBeanContext.getDbdToMvcDefinition().getEntityLocation())){
                 dirName = super.getConnection().getMetaData().getDatabaseProductName() + "_" + BeanUtils.randomNum();
             }
             // 生成文件夹
             createPath = super.exportToFile("", path, dirName);
-            System.out.println("在【" + createPath + "】处创建成功！" );
+            logger.info("在 {} 处创建成功！", createPath);
         }
         int i = 1;
         path = path != null ? path : super.beanLocation().getPath();
-        System.out.println("正在【" + path + "】路径下" + (dirName == null?"" : "的【" + dirName + "】文件夹里") + "为您创建【JavaBean文件】:" );
+        if(dirName == null) {
+            logger.info("正在 {} 路径下为您创建「JavaBean 文件」", path);
+        }else {
+            logger.info("正在 {} 路径下的 {} 文件夹里为您创建「JavaBean 文件」", path, dirName);
+        }
         for (Map.Entry<String, String> entry : fileContentMap.entrySet()) {
-            System.out.println("正在创建第【" + i++ + "】个文件：" + entry.getKey());
+            logger.info("正在创建第【{}】个文件：{}", i++, entry.getKey());
             createPath = super.exportToFiles(entry.getKey(), entry.getValue(), path, dirName);
         }
-        DbdToMVC dbdToMVC = new DbdToMVC();
-        dbdToMVC.dbdToMVC();
-        System.out.println("所有文件创建完毕，位于" + new File(createPath).getAbsolutePath());
+        DbdToMvc dbdToMVC = new DbdToMvc();
+        dbdToMVC.dbdToMvc();
+        logger.info("所有文件创建完毕，位于：{}", new File(createPath).getAbsolutePath());
         return createPath;
     }
 
-    public void set_ToUpper(boolean _ToUpper) {
-        DbdToBeanContext.getDbdToBeanDefinition().setLowerCamelCase(_ToUpper);
+    public void setLowerCamelCase(boolean lowerCamelCase) {
+        DbdToBeanContext.getDbdToBeanDefinition().setLowerCamelCase(lowerCamelCase);
     }
 
     public String firstCharToUpperCase(String fieldName) {
@@ -248,7 +259,7 @@ public class DbdToBean extends DbdToBeanCore {
         return BeanUtils.firstCharToLowerCase(fieldName);
     }
 
-    public String _CharToUpperCase(String name) {
+    public String underlineToUpperCase(String name) {
         return BeanUtils.underlineToUpperCase(name);
     }
 
@@ -260,35 +271,35 @@ public class DbdToBean extends DbdToBeanCore {
     }
 
     public void setModulesName(String modulesName) {
-        DbdToBeanContext.getDbdToMVCDefinition().setModulesName(modulesName);
+        DbdToBeanContext.getDbdToMvcDefinition().setModulesName(modulesName);
     }
 
     public void setEntityLocation(String entityLocation) {
-        DbdToBeanContext.getDbdToMVCDefinition().setEntityLocation(entityLocation);
+        DbdToBeanContext.getDbdToMvcDefinition().setEntityLocation(entityLocation);
     }
 
     public void setControllerLocation(String controllerLocation) {
-        DbdToBeanContext.getDbdToMVCDefinition().setControllerLocation(controllerLocation);
+        DbdToBeanContext.getDbdToMvcDefinition().setControllerLocation(controllerLocation);
     }
 
     public void setServiceLocation(String serviceLocation) {
-        DbdToBeanContext.getDbdToMVCDefinition().setServiceLocation(serviceLocation);
+        DbdToBeanContext.getDbdToMvcDefinition().setServiceLocation(serviceLocation);
     }
 
     public void setDaoLocation(String daoLocation) {
-        DbdToBeanContext.getDbdToMVCDefinition().setDaoLocation(daoLocation);
+        DbdToBeanContext.getDbdToMvcDefinition().setDaoLocation(daoLocation);
     }
 
     public void setMapperLocation(String mapperLocation) {
-        DbdToBeanContext.getDbdToMVCDefinition().setMapperLocation(mapperLocation);
+        DbdToBeanContext.getDbdToMvcDefinition().setMapperLocation(mapperLocation);
     }
 
     public String getMapperXMLLocation() {
-        return DbdToBeanContext.getDbdToMVCDefinition().getMapperXmlLocation();
+        return DbdToBeanContext.getDbdToMvcDefinition().getMapperXmlLocation();
     }
 
     public void setMapperXMLLocation(String mapperXMLLocation) {
-        DbdToBeanContext.getDbdToMVCDefinition().setMapperXmlLocation(mapperXMLLocation);
+        DbdToBeanContext.getDbdToMvcDefinition().setMapperXmlLocation(mapperXMLLocation);
     }
 
     public void setConnection(Connection conn) {
@@ -316,75 +327,75 @@ public class DbdToBean extends DbdToBeanCore {
     }
 
     public String getDateBaseType() throws SQLException {
-        super.parseDateBaseTypeAndGetSQL("");
+        super.parseDataBaseTypeAndGetSql("");
         return DbdToBeanContext.getDbdToBeanDefinition().getDateBaseType();
     }
 
     // ----------------------------------- DBDToMVC -----------------------------------
 
     public void setPrefix(String prefix) {
-        DbdToBeanContext.getDbdToMVCDefinition().setPrefix(prefix);
+        DbdToBeanContext.getDbdToMvcDefinition().setPrefix(prefix);
     }
 
     public void setSuffix(String suffix) {
-        DbdToBeanContext.getDbdToMVCDefinition().setSuffix(suffix);
+        DbdToBeanContext.getDbdToMvcDefinition().setSuffix(suffix);
     }
 
     public void setControllerPre(String controllerPre) {
-        DbdToBeanContext.getDbdToMVCDefinition().setControllerPre(controllerPre);
+        DbdToBeanContext.getDbdToMvcDefinition().setControllerPre(controllerPre);
     }
 
     public void setControllerSuf(String controllerSuf) {
-        DbdToBeanContext.getDbdToMVCDefinition().setControllerSuf(controllerSuf);
+        DbdToBeanContext.getDbdToMvcDefinition().setControllerSuf(controllerSuf);
     }
 
     public void setServiceInterPre(String servicePre) {
-        DbdToBeanContext.getDbdToMVCDefinition().setServiceInterPre(servicePre);
+        DbdToBeanContext.getDbdToMvcDefinition().setServiceInterPre(servicePre);
     }
 
     public void setServiceInterSuf(String serviceSuf) {
-        DbdToBeanContext.getDbdToMVCDefinition().setServiceInterSuf(serviceSuf);
+        DbdToBeanContext.getDbdToMvcDefinition().setServiceInterSuf(serviceSuf);
     }
 
     public void setServiceImplPre(String servicePre) {
-        DbdToBeanContext.getDbdToMVCDefinition().setServiceImplPre(servicePre);
+        DbdToBeanContext.getDbdToMvcDefinition().setServiceImplPre(servicePre);
     }
 
     public void setServiceImplSuf(String serviceSuf) {
-        DbdToBeanContext.getDbdToMVCDefinition().setServiceImplSuf(serviceSuf);
+        DbdToBeanContext.getDbdToMvcDefinition().setServiceImplSuf(serviceSuf);
     }
 
     public void setDaoInterPre(String daoPre) {
-        DbdToBeanContext.getDbdToMVCDefinition().setDaoInterPre(daoPre);
+        DbdToBeanContext.getDbdToMvcDefinition().setDaoInterPre(daoPre);
     }
 
     public void setDaoInterSuf(String daoSuf) {
-        DbdToBeanContext.getDbdToMVCDefinition().setDaoInterSuf(daoSuf);
+        DbdToBeanContext.getDbdToMvcDefinition().setDaoInterSuf(daoSuf);
     }
 
     public void setDaoImplPre(String daoPre) {
-        DbdToBeanContext.getDbdToMVCDefinition().setDaoImplPre(daoPre);
+        DbdToBeanContext.getDbdToMvcDefinition().setDaoImplPre(daoPre);
     }
 
     public void setDaoImplSuf(String daoSuf) {
-        DbdToBeanContext.getDbdToMVCDefinition().setDaoImplSuf(daoSuf);
+        DbdToBeanContext.getDbdToMvcDefinition().setDaoImplSuf(daoSuf);
     }
 
 
     public void setMapperInterPre(String mapperPre) {
-        DbdToBeanContext.getDbdToMVCDefinition().setMapperInterPre(mapperPre);
+        DbdToBeanContext.getDbdToMvcDefinition().setMapperInterPre(mapperPre);
     }
 
     public void setMapperInterSuf(String mapperSuf) {
-        DbdToBeanContext.getDbdToMVCDefinition().setMapperInterSuf(mapperSuf);
+        DbdToBeanContext.getDbdToMvcDefinition().setMapperInterSuf(mapperSuf);
     }
 
     public void setMapperXmlPre(String mapperPre) {
-        DbdToBeanContext.getDbdToMVCDefinition().setMapperXmlPre(mapperPre);
+        DbdToBeanContext.getDbdToMvcDefinition().setMapperXmlPre(mapperPre);
     }
 
     public void setMapperXmlSuf(String mapperSuf) {
-        DbdToBeanContext.getDbdToMVCDefinition().setMapperXmlSuf(mapperSuf);
+        DbdToBeanContext.getDbdToMvcDefinition().setMapperXmlSuf(mapperSuf);
     }
 
     public DbdToBeanDefinition getDbdToBeanDefinition() {
@@ -395,12 +406,12 @@ public class DbdToBean extends DbdToBeanCore {
         return DbdToBeanContext.getDbdToBeanDefinitions();
     }
 
-    public DbdToMVCDefinition getDbdToMVCDefinition() {
-        return DbdToBeanContext.getDbdToMVCDefinition();
+    public DbdToMvcDefinition getDbdToMVCDefinition() {
+        return DbdToBeanContext.getDbdToMvcDefinition();
     }
 
     public void setGenerateCURD(boolean generateCURD) {
-        DbdToBeanContext.getDbdToMVCDefinition().setGeneratecurd(generateCURD);
+        DbdToBeanContext.getDbdToMvcDefinition().setGenerateCurd(generateCURD);
     }
 
     public void setMVImplName(String implLocation){
@@ -412,25 +423,29 @@ public class DbdToBean extends DbdToBeanCore {
     }
 
     public void setMavenOrSimple(boolean mavenOrSimple) {
-        DbdToBeanContext.getDbdToMVCDefinition().setMavenOrSimple(mavenOrSimple);
+        DbdToBeanContext.getDbdToMvcDefinition().setMavenOrSimple(mavenOrSimple);
     }
 
     public void setGenerateRequestBody(boolean generateRequestBody) {
-        DbdToBeanContext.getDbdToMVCDefinition().setGenerateRequestBody(generateRequestBody);
+        DbdToBeanContext.getDbdToMvcDefinition().setGenerateRequestBody(generateRequestBody);
     }
 
     public void setColumnNum(int columnNum) {
-        DbdToBeanContext.getDbdToMVCDefinition().setColumnNum(columnNum);
+        DbdToBeanContext.getDbdToMvcDefinition().setColumnNum(columnNum);
+    }
+    
+    public void setStartSwagger(boolean startSwagger) {
+        DbdToBeanContext.getDbdToMvcDefinition().setStartSwagger(startSwagger);
     }
 
     // ----------------------------------- log -----------------------------------
 
-    public DBDToBeanLog getLogInfo(){
-        return new DBDToBeanLog();
+    public DbdToBeanLog getLogInfo(){
+        return new DbdToBeanLog();
     }
 
-    public DBDToBeanAPI getDBDToBeanAPI(){
-        return new DBDToBeanAPI();
+    public DbdToBeanAPI getDBDToBeanAPI(){
+        return new DbdToBeanAPI();
     }
 
     // ----------------------------------- Utils -----------------------------------

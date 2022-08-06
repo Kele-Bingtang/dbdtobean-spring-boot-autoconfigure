@@ -12,9 +12,9 @@ import cn.kbt.dbdtobean.utils.BeanUtils;
 public class HeadComment extends AbstractComment {
     private String author = "@author ";
     private String createTime = "@since ";
-    private String version = "@version 1.6";
+    private String version = "@version 1.0";
     private String describe = " ";
-    private StringBuilder headComments = null;
+    private StringBuilder headComments = new StringBuilder();
 
     public String getAuthor() {
         return author;
@@ -49,9 +49,6 @@ public class HeadComment extends AbstractComment {
     }
 
     public StringBuilder getHeadComments() {
-        if (headComments == null) {
-            headComments = new StringBuilder();
-        }
         return headComments;
     }
 
@@ -69,8 +66,8 @@ public class HeadComment extends AbstractComment {
      * @param headComment 注释内容
      */
     public void setHeadComment(String headComment) {
-        //缓存区添加自定义的类注释
-        super.parseCommentType(headComments, headComment, "/*");
+        // 缓存区添加自定义的类注释
+        super.parseCommentType(headComments, headComment, "/**", true);
     }
 
     /**
@@ -80,17 +77,27 @@ public class HeadComment extends AbstractComment {
      * @param commentType 注释类型
      */
     public void setHeadComment(String headComment, String commentType) {
-        super.parseCommentType(headComments, headComment, commentType);
+        super.parseCommentType(headComments, headComment, commentType, true);
     }
 
+    /**
+     * 生成类注释
+     * @param author 作者
+     * @return 内容
+     */
     public StringBuilder generateHeadComments(String author) {
+        String oneLine = BeanUtils.getN(1);
         this.headComments.setLength(0);
-        this.headComments.append("/**\n * ")
+        this.headComments.append("/**")
+                .append(oneLine).append(" * ")
                 .append(this.author).append(author)
-                .append("\n * ").append(this.createTime).append(BeanUtils.getCurrentTime())
-                .append("\n * ").append(this.version)
-                .append("\n * ").append(this.describe)
-                .append("\n */\n");
+                .append(oneLine).append(" * ")
+                .append(this.createTime).append(BeanUtils.getCurrentTime())
+                .append(oneLine).append(" * ")
+                .append(this.version)
+                .append(oneLine).append(" * ")
+                .append(this.describe)
+                .append(oneLine).append(" */").append(oneLine);
         return headComments;
     }
 

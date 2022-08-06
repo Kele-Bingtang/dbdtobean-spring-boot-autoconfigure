@@ -4,7 +4,7 @@ import cn.kbt.dbdtobean.comment.DefaultComment;
 import cn.kbt.dbdtobean.core.DbdToBean;
 import cn.kbt.dbdtobean.core.DbdToBeanContext;
 import cn.kbt.dbdtobean.core.DbdToBeanDefinition;
-import cn.kbt.dbdtobean.mvcbean.DbdToMVCDefinition;
+import cn.kbt.dbdtobean.mvcbean.DbdToMvcDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties({DbdToBeanProperties.class, DbdToBeanDataSource.class, DbdToMVCDefinition.class, DbdToBeanDefinition.class, DefaultComment.class})
+@EnableConfigurationProperties({DbdToBeanProperties.class, DbdToBeanDataSource.class, DbdToMvcDefinition.class, DbdToBeanDefinition.class, DefaultComment.class})
 public class DbdToBeanConfiguration {
     @Autowired
     DbdToBeanProperties dbdToBeanProperties;
     @Autowired
     DbdToBeanDefinition dbdToBeanDefinition;
     @Autowired
-    DbdToMVCDefinition dbdToMVCDefinition;
+    DbdToMvcDefinition dbdToMVCDefinition;
     @Autowired
     DefaultComment defaultComment;
 
@@ -35,7 +35,7 @@ public class DbdToBeanConfiguration {
     public void setDBDToBeanContext(){
         DbdToBeanContext.setDbdToBeanProperties(dbdToBeanProperties);
         DbdToBeanContext.setDbdToBeanDefinition(dbdToBeanDefinition);
-        DbdToBeanContext.setDbdToMVCDefinition(dbdToMVCDefinition);
+        DbdToBeanContext.setDbdToMvcDefinition(dbdToMVCDefinition);
         DbdToBeanContext.setDefaultComment(defaultComment);
     }
     

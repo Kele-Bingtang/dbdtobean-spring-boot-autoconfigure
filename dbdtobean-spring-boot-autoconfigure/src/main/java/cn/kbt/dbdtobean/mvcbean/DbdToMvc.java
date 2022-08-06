@@ -2,7 +2,7 @@ package cn.kbt.dbdtobean.mvcbean;
 
 import cn.kbt.dbdtobean.core.DbdToBeanContext;
 import cn.kbt.dbdtobean.core.DbdToBeanDefinition;
-import cn.kbt.dbdtobean.inter.IDBDToMVC;
+import cn.kbt.dbdtobean.inter.IDbdToMVC;
 import cn.kbt.dbdtobean.utils.BeanUtils;
 
 import java.io.IOException;
@@ -14,17 +14,17 @@ import java.util.List;
  * @version 1.6
  *  MVC核心类
  */
-public class DbdToMVC implements IDBDToMVC {
+public class DbdToMvc implements IDbdToMVC {
     /** 定义类信息 **/
     List<DbdToBeanDefinition> definitions = DbdToBeanContext.getDbdToBeanDefinitions();
 
     /**
-     * 生成Controller层所有内容
+     * 生成 Controller 层所有内容
      * @throws IOException IO 异常
      */
     @Override
     public void dbdToController() throws IOException {
-        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMVCDefinition().getControllerLocation())){
+        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMvcDefinition().getControllerLocation())){
             DbdToController dbdToController = new DbdToController();
             for (DbdToBeanDefinition definition : definitions) {
                 dbdToController.controllerBean(definition.getCreateBeanName());
@@ -33,12 +33,12 @@ public class DbdToMVC implements IDBDToMVC {
     }
 
     /**
-     * 生成Service层所有内容
+     * 生成 Service 层所有内容
      * @throws IOException IO 异常
      */
     @Override
     public void dbdToService() throws IOException {
-        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMVCDefinition().getServiceLocation())){
+        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMvcDefinition().getServiceLocation())){
             DbdToService dbdToService = new DbdToService();
             for (DbdToBeanDefinition definition : definitions) {
                 dbdToService.serviceInterfaces(definition.getCreateBeanName());
@@ -48,12 +48,12 @@ public class DbdToMVC implements IDBDToMVC {
     }
 
     /**
-     * 生成Dao层所有内容
+     * 生成 Dao 层所有内容
      * @throws IOException IO 异常
      */
     @Override
     public void dbdToDao() throws IOException {
-        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMVCDefinition().getDaoLocation())){
+        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMvcDefinition().getDaoLocation())){
             DbdToDao dbdToDao = new DbdToDao();
             for (DbdToBeanDefinition definition : definitions) {
                 dbdToDao.daoInterfaces(definition.getCreateBeanName());
@@ -63,25 +63,25 @@ public class DbdToMVC implements IDBDToMVC {
     }
 
     /**
-     * 生成Mapper层所有内容
+     * 生成 Mapper 层所有内容
      * @throws IOException IO 异常
      */
     @Override
     public void dbdToMapper() throws IOException {
-        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMVCDefinition().getMapperLocation())){
+        if(BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMvcDefinition().getMapperLocation())){
             DbdToMapper dbdToMapper = new DbdToMapper();
             for (DbdToBeanDefinition definition : definitions) {
                 dbdToMapper.mapperInterfaces(definition.getCreateBeanName());
-                dbdToMapper.mapperXML(definition.getCreateBeanName(), definition.getTableName());
+                dbdToMapper.mapperXml(definition.getCreateBeanName(), definition.getTableName());
             }
         }
     }
 
     /**
-     * 整合生成MVC内容的API
+     * 整合生成 MVC 内容的 API
      * @throws IOException IO 异常
      */
-    public void dbdToMVC() throws IOException {
+    public void dbdToMvc() throws IOException {
         this.dbdToController();
         this.dbdToService();
         this.dbdToDao();

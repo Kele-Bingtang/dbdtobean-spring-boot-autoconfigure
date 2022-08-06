@@ -14,7 +14,7 @@ public class DbdToBeanDataSource {
      **/
     private String driverClassName;
     /**
-     * 数据库url
+     * 数据库 url
      **/
     private String url;
     /**

@@ -3,7 +3,7 @@ package cn.kbt.dbdtobean.core;
 import cn.kbt.dbdtobean.comment.DefaultComment;
 import cn.kbt.dbdtobean.comment.CustomComment;
 import cn.kbt.dbdtobean.config.DbdToBeanProperties;
-import cn.kbt.dbdtobean.mvcbean.DbdToMVCDefinition;
+import cn.kbt.dbdtobean.mvcbean.DbdToMvcDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class DbdToBeanContext {
     }
 
     /**
-     * 支持Spring boot配置文件，只需在spring boot配置文件写入数据库配置等信息即可获取数据库源对象
+     * 支持 Spring Boot 配置文件，只需在 Spring Boot 配置文件写入数据库配置等信息即可获取数据库源对象
      **/
     private static volatile DbdToBeanProperties dbdToBeanProperties;
     /**
@@ -32,24 +32,23 @@ public class DbdToBeanContext {
      **/
     private static volatile DefaultComment defaultComment;
     /**
-     * 定义类，针对单表，有很多定义信息，如生成的JavaBean文件名，去掉下划线后的首字母大写等
+     * 定义类，针对单表，有很多定义信息，如生成的 Java Bean 文件名，去掉下划线后的首字母大写等
      **/
-    private static DbdToBeanDefinition dbdToBeanDefinition;
+    private static volatile DbdToBeanDefinition dbdToBeanDefinition;
     /**
      * 定义类集合，针对多个表
      **/
     private static volatile List<DbdToBeanDefinition> dbdToBeanDefinitions;
     /**
-     * MVC定义类，生成MVC文件的信息
+     * MVC 定义类，生成 MVC 文件的信息
      **/
-    private static DbdToMVCDefinition dbdToMVCDefinition;
+    private static volatile DbdToMvcDefinition dbdToMVCDefinition;
 
     public static DbdToBeanProperties getDbdToBeanProperties() {
         if (dbdToBeanProperties == null) {
             synchronized (DbdToBeanContext.class) {
                 if (dbdToBeanProperties == null) {
                     dbdToBeanProperties = new DbdToBeanProperties();
-                    return dbdToBeanProperties;
                 }
             }
         }
@@ -61,7 +60,6 @@ public class DbdToBeanContext {
             synchronized (DbdToBeanContext.class) {
                 if (customComment == null) {
                     customComment = new CustomComment();
-                    return customComment;
                 }
             }
         }
@@ -73,7 +71,6 @@ public class DbdToBeanContext {
             synchronized (DbdToBeanContext.class) {
                 if (defaultComment == null) {
                     defaultComment = new DefaultComment();
-                    return defaultComment;
                 }
             }
         }
@@ -85,7 +82,6 @@ public class DbdToBeanContext {
             synchronized (DbdToBeanContext.class) {
                 if (dbdToBeanDefinition == null) {
                     dbdToBeanDefinition = new DbdToBeanDefinition();
-                    return dbdToBeanDefinition;
                 }
             }
         }
@@ -96,20 +92,18 @@ public class DbdToBeanContext {
         if (dbdToBeanDefinitions == null) {
             synchronized (DbdToBeanContext.class) {
                 if (dbdToBeanDefinitions == null) {
-                    dbdToBeanDefinitions = new ArrayList<DbdToBeanDefinition>();
-                    return dbdToBeanDefinitions;
+                    dbdToBeanDefinitions = new ArrayList<>();
                 }
             }
         }
         return dbdToBeanDefinitions;
     }
 
-    public static DbdToMVCDefinition getDbdToMVCDefinition() {
+    public static DbdToMvcDefinition getDbdToMvcDefinition() {
         if (dbdToMVCDefinition == null) {
             synchronized (DbdToBeanContext.class) {
                 if (dbdToMVCDefinition == null) {
-                    dbdToMVCDefinition = new DbdToMVCDefinition();
-                    return dbdToMVCDefinition;
+                    dbdToMVCDefinition = new DbdToMvcDefinition();
                 }
             }
         }
@@ -136,9 +130,7 @@ public class DbdToBeanContext {
         DbdToBeanContext.dbdToBeanDefinitions = dbdToBeanDefinitions;
     }
 
-    public static void setDbdToMVCDefinition(DbdToMVCDefinition dbdToMVCDefinition) {
-        DbdToBeanContext.dbdToMVCDefinition = dbdToMVCDefinition;
+    public static void setDbdToMvcDefinition(DbdToMvcDefinition dbdToMvcDefinition) {
+        DbdToBeanContext.dbdToMVCDefinition = dbdToMvcDefinition;
     }
-
-
 }
