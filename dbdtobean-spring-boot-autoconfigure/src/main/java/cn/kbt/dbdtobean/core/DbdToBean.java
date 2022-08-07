@@ -7,6 +7,7 @@ import cn.kbt.dbdtobean.log.DbdToBeanLog;
 import cn.kbt.dbdtobean.mvcbean.AbstractDbdToMVC;
 import cn.kbt.dbdtobean.mvcbean.DbdToMvc;
 import cn.kbt.dbdtobean.mvcbean.DbdToMvcDefinition;
+import cn.kbt.dbdtobean.mvcbean.DbdToSwagger;
 import cn.kbt.dbdtobean.utils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,15 +179,11 @@ public class DbdToBean extends DbdToBeanCore {
     }
 
     public String exportToFile(String fileContent) throws IOException {
-        String createPath = exportToFile(fileContent, null, null);
-        logger.info("创建 {} 实体类成功，位于：{}", DbdToBeanContext.getDbdToBeanDefinition().getCreateBeanName(), new File(createPath).getAbsolutePath());
-        return createPath;
+        return exportToFile(fileContent, null, null);
     }
 
     public String exportToFile(String fileContent, String path) throws IOException {
-        String createPath = exportToFile(fileContent, path, null);
-        logger.info("创建 {} 实体类成功，位于：{}", DbdToBeanContext.getDbdToBeanDefinition().getCreateBeanName(), new File(createPath).getAbsolutePath());
-        return createPath;
+        return exportToFile(fileContent, path, null);
     }
     
     public String exportToFile(String fileContent, String path, String dirName) throws IOException {
@@ -204,8 +201,17 @@ public class DbdToBean extends DbdToBeanCore {
             }
         }
         String createPath = super.exportToFile(fileContent, path, dirName);
+        logger.info("开始生成 MVC 文件");
         DbdToMvc dbdToMVC = new DbdToMvc();
         dbdToMVC.dbdToMvc();
+        logger.info("生成 MVC 文件成功");
+        if(DbdToBeanContext.getDbdToMvcDefinition().isOpenSwagger()) {
+            logger.info("开始生成 Swagger 文件");
+            DbdToSwagger dbdToSwagger = new DbdToSwagger();
+            dbdToSwagger.createSwagger();
+            logger.info("成功生成 Swagger 文件");
+        }
+        logger.info("所有文件创建完毕，位于：{}", new File(createPath.substring(0, createPath.lastIndexOf("\\"))).getAbsolutePath());
         return createPath;
     }
 
@@ -241,9 +247,30 @@ public class DbdToBean extends DbdToBeanCore {
             logger.info("正在创建第【{}】个文件：{}", i++, entry.getKey());
             createPath = super.exportToFiles(entry.getKey(), entry.getValue(), path, dirName);
         }
+        logger.info("开始生成 MVC 文件");
         DbdToMvc dbdToMVC = new DbdToMvc();
         dbdToMVC.dbdToMvc();
-        logger.info("所有文件创建完毕，位于：{}", new File(createPath).getAbsolutePath());
+        logger.info("生成 MVC 文件成功");
+        if(DbdToBeanContext.getDbdToMvcDefinition().isOpenSwagger()) {
+            logger.info("开始生成 Swagger 文件");
+            DbdToSwagger dbdToSwagger = new DbdToSwagger();
+            dbdToSwagger.createSwagger();
+            logger.info("生成 Swagger 文件成功");
+        }
+        logger.info("所有文件创建完毕，位于：{}", new File(createPath.substring(0, createPath.lastIndexOf("\\"))).getAbsolutePath());
+        if(DbdToBeanContext.getDbdToMvcDefinition().isOpenSwagger()) { 
+            logger.info("你已经生成 Swagger 相关配置，请自行在 pom.xml 里引入 Swagger 的依赖，这里提供一个依赖版本：" +
+                    "<dependency>\n" +
+                    "    <groupId>io.springfox</groupId>\n" +
+                    "    <artifactId>springfox-swagger2</artifactId>\n" +
+                    "    <version>2.9.2</version>\n" +
+                    "    </dependency>\n" +
+                    "    <dependency>\n" +
+                    "    <groupId>io.springfox</groupId>\n" +
+                    "    <artifactId>springfox-swagger-ui</artifactId>\n" +
+                    "    <version>2.9.2</version>\n" +
+                    "</dependency>");
+        }
         return createPath;
     }
 
@@ -426,6 +453,10 @@ public class DbdToBean extends DbdToBeanCore {
         DbdToBeanContext.getDbdToMvcDefinition().setMavenOrSimple(mavenOrSimple);
     }
 
+    public void setMvcAnnotation(boolean mvcAnnotation) {
+        DbdToBeanContext.getDbdToMvcDefinition().setMvcAnnotation(mvcAnnotation);
+    }
+
     public void setGenerateRequestBody(boolean generateRequestBody) {
         DbdToBeanContext.getDbdToMvcDefinition().setGenerateRequestBody(generateRequestBody);
     }
@@ -435,7 +466,15 @@ public class DbdToBean extends DbdToBeanCore {
     }
     
     public void setStartSwagger(boolean startSwagger) {
-        DbdToBeanContext.getDbdToMvcDefinition().setStartSwagger(startSwagger);
+        DbdToBeanContext.getDbdToMvcDefinition().setOpenSwagger(startSwagger);
+    }
+    
+    public void setSwaggerLocation(String swaggerLocation) {
+        DbdToBeanContext.getDbdToMvcDefinition().setSwaggerLocation(swaggerLocation);
+    }
+    
+    public void setSwaggerVersion(DbdToMvcDefinition.SwaggerVersion swaggerVersion) {
+        DbdToBeanContext.getDbdToMvcDefinition().setSwaggerVersion(swaggerVersion);
     }
 
     // ----------------------------------- log -----------------------------------

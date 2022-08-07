@@ -104,18 +104,38 @@ public class CustomComment extends AbstractComment {
      */
     public void customFiledComment(StringBuilder sb, ResultSet columnsInfo, String content, int i) throws SQLException {
         List<String> comment = DbdToBeanContext.getCustomComment().getFiledComment();
+        String oneTab = BeanUtils.getT(1);
+        String oneLine = BeanUtils.getN(1);
+        String oneLineAndOneTab = BeanUtils.getNT(1, 1);
+        boolean startSwagger = DbdToBeanContext.getDbdToMvcDefinition().isOpenSwagger();
         if (BeanUtils.isNotEmpty(comment) && comment.size() >= i) {
             columnsInfo.next();
-            // 解析注释类型，生成不同类型的注释
-            super.parseCommentType(sb, comment.get(i - 1));
+            if(startSwagger) {
+                sb.append(oneTab).append("@ApiModelProperty(").append(BeanUtils.addColon(comment.get(i - 1))).append(")").append(oneLine);
+            } else {
+                // 解析注释类型，生成不同类型的注释
+                super.parseCommentType(sb, comment.get(i - 1));
+            }
         } else {  // 没有自定义注释，获取数据库的注释
             if (DbdToBeanContext.getDefaultComment().isFieldComment()) {
                 if (BeanUtils.isNotEmpty(columnsInfo) && columnsInfo.next()) {
-                    // 获取数据库的注释，如果数据库的字段没有注释，且没有自定义注释，则生成规定的注释
-                    super.parseCommentType(sb, BeanUtils.isNotEmpty(columnsInfo.getString(REMARKS)) ? columnsInfo.getString(REMARKS) : content);
+                    if(startSwagger) {
+                        sb.append(oneLineAndOneTab).append("@ApiModelProperty(")
+                                .append(BeanUtils.addColon(BeanUtils.isNotEmpty(columnsInfo.getString(REMARKS)) ? columnsInfo.getString(REMARKS) : content))
+                                .append(")").append(oneLine);
+                    } else {
+                        // 获取数据库的注释，如果数据库的字段没有注释，且没有自定义注释，则生成规定的注释
+                        super.parseCommentType(sb, BeanUtils.isNotEmpty(columnsInfo.getString(REMARKS)) ? columnsInfo.getString(REMARKS) : content);
+                    }
                 } else {  // 没有自定义注释，数据库的字段没有注释，生成规定的注释
-                    // 解析注释类型，生成不同类型的注释
-                    super.parseCommentType(sb, content);
+                    if(startSwagger) {
+                        sb.append(oneTab).append("@ApiModelProperty(")
+                                .append(BeanUtils.addColon(content))
+                                .append(")").append(oneLine);
+                    } else {
+                        // 解析注释类型，生成不同类型的注释
+                        super.parseCommentType(sb, content);
+                    }
                 }
             }
         }

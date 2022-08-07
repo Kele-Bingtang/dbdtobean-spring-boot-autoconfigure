@@ -55,20 +55,20 @@ public abstract class AbstractComment {
     protected void parseCommentType(StringBuilder sb, String comment, String commentType, boolean isHeadComment) {
         String oneTab = BeanUtils.getT(1);
         String oneLine = BeanUtils.getN(1);
-        String oneLineOneTab = BeanUtils.getNT(1, 1);
-        String oneLineTwoTab = BeanUtils.getNT(1, 2);
+        String oneLineAndOneTab = BeanUtils.getNT(1, 1);
+        String oneLineAndTwoTab = BeanUtils.getNT(1, 2);
         if(!isHeadComment) {
             sb.append(oneTab);
         }
         if ("//".equals(commentType)) {
             sb.append("// ").append(comment).append(oneLine);
         } else if ("/*".equals(commentType)) {
-            sb.append("/*").append(isHeadComment ? oneLineOneTab : oneLineTwoTab)
-                    .append(comment).append(isHeadComment ? oneLine : oneLineOneTab)
+            sb.append("/*").append(isHeadComment ? oneLineAndOneTab : oneLineAndTwoTab)
+                    .append(comment).append(isHeadComment ? oneLine : oneLineAndOneTab)
                     .append("*/").append(oneLine);
         } else {
-            sb.append("/**").append(isHeadComment ? oneLine : oneLineOneTab)
-                    .append(" * ").append(comment).append(isHeadComment ? oneLine : oneLineOneTab)
+            sb.append("/**").append(isHeadComment ? oneLine : oneLineAndOneTab)
+                    .append(" * ").append(comment).append(isHeadComment ? oneLine : oneLineAndOneTab)
                     .append(" */").append(oneLine);
         } 
     }

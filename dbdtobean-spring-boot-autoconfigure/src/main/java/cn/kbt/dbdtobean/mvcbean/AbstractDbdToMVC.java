@@ -59,7 +59,7 @@ public abstract class AbstractDbdToMVC {
         File file = mvcFilePath(DbdToBeanContext.getDbdToMvcDefinition(), null, location);
         file.mkdirs();
         String createClassName  = parseMvcName(DbdToBeanContext.getDbdToMvcDefinition(), createBeanName, mvcName);
-        file = new File(file + "\\" + createClassName + ".java");
+        file = new File(file + "/" + createClassName + ".java");
         FileWriter fw = new FileWriter(file);
         fw.write(mvcInterContent(definition, createBeanName, mvcName));
         fw.flush();
@@ -101,7 +101,7 @@ public abstract class AbstractDbdToMVC {
         File file;
         if (BeanUtils.isNotEmpty(mvcInterfaceName)) {
             isInterface = true;
-            file = new File(System.getProperty("user.dir") + "/" + definition.getModulesName() + "/" + definition.getMavenOrSimple() + BeanUtils.packageToPath(location) + "\\" + IMPL_NAME);
+            file = new File(System.getProperty("user.dir") + "/" + definition.getModulesName() + "/" + definition.getMavenOrSimple() + BeanUtils.packageToPath(location) + "/" + IMPL_NAME);
         } else {
             isInterface = false;
             file = new File(System.getProperty("user.dir") + "/" + definition.getModulesName() + "/" + definition.getMavenOrSimple() + BeanUtils.packageToPath(location));
@@ -194,6 +194,10 @@ public abstract class AbstractDbdToMVC {
                 content.append(mvcAnnotation).append(oneLine).append("@RequestMapping(")
                         .append(BeanUtils.addColon("/" + BeanUtils.firstCharToLowerCase(createBeanName)))
                         .append(")").append(oneLine);
+            }
+            if(definition.isOpenSwagger()) {
+                content.append("@Api(value = ").append(BeanUtils.addColon(createClassName))
+                        .append(", tags = ").append(BeanUtils.addColon(createClassName)).append(")").append(oneLine);
             }
             content.append("public class ").append(createClassName).append(" {").append(twoLine);
             if (BeanUtils.isNotEmpty(DbdToBeanContext.getDbdToMvcDefinition().getServiceLocation())) {

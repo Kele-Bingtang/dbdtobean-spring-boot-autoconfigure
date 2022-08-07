@@ -2,8 +2,6 @@ package cn.kbt.dbdtobean.mvcbean;
 
 import cn.kbt.dbdtobean.core.DbdToBeanContext;
 import cn.kbt.dbdtobean.utils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,8 +17,6 @@ import java.util.List;
  * @since 2021/9/21 23:09
  */
 public class DbdToMapper extends AbstractDbdToMVC {
-
-    private static final Logger logger = LoggerFactory.getLogger(DbdToMapper.class);
 
     protected static final  String MAPPER_INTERFACE_NAME = "Mapper";
     protected static final  String MAVEN_MAPPER_XML_HONE = "src\\main\\resources\\";
@@ -47,11 +43,9 @@ public class DbdToMapper extends AbstractDbdToMVC {
      * @throws IOException IO 异常
      */
     protected void mapperInterfaces(String createBeanName) throws IOException {
-        logger.info("开始生成 {} 的 Mapper 层接口目录以及内容", createBeanName);
         createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
         DbdToMvcDefinition definition = DbdToBeanContext.getDbdToMvcDefinition();
         interfacesName = super.createInterfaces(definition, createBeanName, MAPPER_INTERFACE_NAME);
-        logger.info("生成 {} 的 Mapper 层接口目录以及内容完成", createBeanName);
     }
 
     /**
@@ -61,7 +55,6 @@ public class DbdToMapper extends AbstractDbdToMVC {
      * @throws IOException IO 异常
      */
     protected void mapperXml(String createBeanName, String tableName) throws IOException {
-        logger.info("开始生成 {} 的 Mapper 层 xml 文件目录以及内容", createBeanName);
         createBeanName = BeanUtils.underlineToUpperCase(createBeanName);
         this.entityName = createBeanName;
         DbdToMvcDefinition definition = DbdToBeanContext.getDbdToMvcDefinition();
@@ -73,7 +66,6 @@ public class DbdToMapper extends AbstractDbdToMVC {
         fw.write(createXmlStart(tableName));
         fw.flush();
         fw.close();
-        logger.info("生成 {} 的 Mapper 层 xml 文件目录以及内容完成", createBeanName);
     }
 
     /**

@@ -12,17 +12,17 @@ public class DbdToBeanAPI {
      * 单个 Java Bean 实体类生成文档
      * @return API 文档
      */
-    public String dbdToBeanEntityApi(){
+    public String DbdToBeanEntityApi(){
         return "\tString driverName = \"\";\n" +
                 "\tString url = \"\";\n" +
                 "\tString username = \"\";\n" +
                 "\tString password = \"\";" +
-                "\tConnection connection = DBDToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
-                "\tDBDToBean dbdToBean = new DBDToBean();\n" +
+                "\tConnection connection = DbdToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
+                "\tDbdToBean dbdToBean = new DbdToBean();\n" +
                 "\tdbdToBean.setConnection(connection);\n" +
                 "\tdbdToBean.setPackageName(\"包路径\"); // 设置实体类包路径\n" +
                 "\tdbdToBean.setAuthorName(\"作者名\"); // 设置作者名\n" +
-                "\tdbdToBean.set_ToUpper(true); // 开启驼峰命名\n" +
+                "\tdbdToBean.setLowerCamelCase(true); // 开启驼峰命名\n" +
                 "\tdbdToBean.setAllComments(true); // 打开注释\n" +
                 "\tdbdToBean.setHeadComment(true); // 打开类注释\n" +
                 "\tdbdToBean.setCommentType(\"/*\"); // 三种注释类型：//  /*  /**\n" +
@@ -37,17 +37,17 @@ public class DbdToBeanAPI {
      * 多个 Java Bean 实体类生成文档
      * @return API 文档
      */
-    public String dbdToBeanEntityListApi(){
+    public String DbdToBeanEntityListApi(){
         return "\tString driverName = \"\";\n" +
                 "\tString url = \"\";\n" +
                 "\tString username = \"\";\n" +
                 "\tString password = \"\";" +
-                "\tConnection connection = DBDToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
-                "\tDBDToBean dbdToBean = new DBDToBean();\n" +
+                "\tConnection connection = DbdToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
+                "\tDbdToBean dbdToBean = new DbdToBean();\n" +
                 "\tdbdToBean.setConnection(connection);\n" +
                 "\tdbdToBean.setPackageName(\"包路径\"); // 设置实体类包路径\n" +
                 "\tdbdToBean.setAuthorName(\"作者名\"); // 设置作者名\n" +
-                "\tdbdToBean.set_ToUpper(true); // 开启驼峰命名\n" +
+                "\tdbdToBean.setLowerCamelCase(true); // 开启驼峰命名\n" +
                 "\tdbdToBean.setAllComments(true); // 打开注释\n" +
                 "\tdbdToBean.setHeadComment(true); // 打开类注释\n" +
                 "\tdbdToBean.setCommentType(\"/*\"); // 注释类型：//  /*  /**\n" +
@@ -55,31 +55,34 @@ public class DbdToBeanAPI {
                 "dbdToBean.setEntityLocation(\"cn.kbt.bean\"); // 实体类的包名，不填写，则默认生成在桌面" +
                 "\tHashMap<String, String> beanContents = dbdToBean.createBeanFromDataBase(); // 读取 url 里数据库的所有表\n" +
                 "\tString createPath = dbdToBean.exportToFile(beanContents); // 导出到实体类文件\n" +
-                "\tdbdToBean.closeConnection(); // 关闭数据库";
+                "\tDbdToBean.closeConnection(); // 关闭数据库";
     }
 
     /**
      * Java Bean、Mapper、Service、Controller 生成文档
      * @return API 文档
      */
-    public String dbdToBeanMvcApi(){
-        return "\tConnection connection = DBDToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
-                "\tDBDToBean dbdToBean = new DBDToBean();\n" +
+    public String DbdToBeanMvcApi(){
+        return "\tConnection connection = DbdToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
+                "\tDbdToBean dbdToBean = new DbdToBean();\n" +
                 "\tdbdToBean.setConnection(connection);\n" +
                 "\tdbdToBean.setPackageName(\"包路径\"); // 设置实体类包路径\n" +
                 "\tdbdToBean.setAuthorName(\"作者名\"); // 设置作者名\n" +
-                "\tdbdToBean.set_ToUpper(true); // 开启驼峰命名\n" +
+                "\tdbdToBean.setLowerCamelCase(true); // 开启驼峰命名\n" +
                 "\tdbdToBean.setAllComments(true); // 打开注释\n" +
                 "\tdbdToBean.setHeadComment(true); // 打开类注释\n" +
                 "\tdbdToBean.setCommentType(\"/*\"); // 注释类型：//  /*  /**\n" +
                 "\tdbdToBean.setBeanFirstNameIsUp(true); // 文件名首字母大写\n" +
-                "\tdbdToBean.setModulesName(\"dbdtobean-spring-boot-autoconfigure\"); // 模块名字，如果项目里有多个模块，可使用，反之不要使用\n" +
+                "\tdbdToBean.setModulesName(\"DbdToBean-spring-boot-autoconfigure\"); // 模块名字，如果项目里有多个模块，可使用，反之不要使用\n" +
                 "\tdbdToBean.setControllerLocation(\"cn.kbt.controller\"); // Controller 的全类名\n" +
                 "\tdbdToBean.setServiceLocation(\"cn.kbt.service\"); // Service 的全类名\n" +
                 "\tdbdToBean.setDaoLocation(\"cn.kbt.dao\"); // Dao 的全类名，与 Mapper 二选一，因为默认不 set，不会生成该模块的类\n" +
                 "\tdbdToBean.setMapperLocation(\"cn.kbt.mapper\"); // Mapper 的全类名，与 Dao 二选一\n" +
                 "\tdbdToBean.setEntityLocation(\"cn.kbt.bean\"); // 实体类的包名，不填写，默认生成在桌面\n" +
                 "\tdbdToBean.setGenerateCURD(true); // 生成增删改查的基础方法\n" +
+                "\tdbdToBean.setStartSwagger(true); // 生成 Swagger 的配置\n" +
+                "\tdbdToBean.setSwaggerLocation(true); // 设置 Swagger 的配置文件路径\n" +
+                "\tdbdToBean.setSwaggerVersion(SwaggerVersion.SWAGGER_2); // 设置 Swagger 的版本\n" +
                 "\tHashMap<String, String> map = dbdToBean.createBeanFromDataBase(); // 读取 url 里数据库的所有表\n" +
                 "\tdbdToBean.exportToFile(map); // 导出到文件\n" +
                 "\tdbdToBean.closeConnection(); // 关闭数据库";
@@ -89,13 +92,13 @@ public class DbdToBeanAPI {
      * Java Bean、Mapper、Service、Controller 自定义生成文档
      * @return API 文档
      */
-    public String dbdToBeanCustomerMvcApi(){
-        return "\tConnection connection = DBDToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
-                "\tDBDToBean dbdToBean = new DBDToBean();\n" +
+    public String DbdToBeanCustomerMvcApi(){
+        return "\tConnection connection = DbdToBeanUtils.getMysqlConnection(driverName, url, username, password);\n" +
+                "\tDbdToBean dbdToBean = new DbdToBean();\n" +
                 "\tdbdToBean.setConnection(connection);\n" +
                 "\tdbdToBean.setPackageName(\"包路径\"); // 设置实体类包路径\n" +
                 "\tdbdToBean.setAuthorName(\"作者名\");\n" +
-                "\tdbdToBean.set_ToUpper(true); // 开启驼峰命名\n" +
+                "\tdbdToBean.setLowerCamelCase(true); // 开启驼峰命名\n" +
                 "\tdbdToBean.setAllComments(true); // 打开注释\n" +
                 "\tdbdToBean.setHeadComment(true); // 打开类注释\n" +
                 "\tdbdToBean.setCommentType(\"/*\"); // 注释类型：//  /*  /**\n" +
@@ -105,8 +108,14 @@ public class DbdToBeanAPI {
                 "\tdbdToBean.setServiceLocation(\"cn.kbt.service\"); // Service 的全类名\n" +
                 "\tdbdToBean.setDaoLocation(\"cn.kbt.dao\"); // Dao 的全类名，与 Mapper 二选一，因为默认不 set，不会生成该模块的类\n" +
                 "\tdbdToBean.setMapperLocation(\"cn.kbt.mapper\"); // Mapper 的全类名，与 Dao 二选一\n" +
-                "\tbdToBean.setEntityLocation(\"cn.kbt.bean\"); // 实体类的包名，不填写，默认生成在桌面\n" +
+                "\tdbdToBean.setEntityLocation(\"cn.kbt.bean\"); // 实体类的包名，不填写，默认生成在桌面\n" +
                 "\tdbdToBean.setGenerateCURD(true); // 生成增删改查的基础方法\n" +
+                "\tdbdToBean.setMvcAnnotation(true); // 生成 MVC 的注解\n" +
+                "\tdbdToBean.setGenerateRequestBody(true); // 在 Controller 层的方法参数添加 @RequestBody 注解\n" +
+                "\tdbdToBean.setColumnNum(6); // Mapper 的 XML 文件中，sql 标签每有多少字段换一次行\n" +
+                "\tdbdToBean.setStartSwagger(true); // 生成 Swagger 的配置\n" +
+                "\tdbdToBean.setSwaggerLocation(true); // 设置 Swagger 的配置文件路径\n" +
+                "\tdbdToBean.setSwaggerVersion(SwaggerVersion.SWAGGER_2); // 设置 Swagger 的版本\n" +
                 "\tdbdToBean.setPrefix(\"ke\"); // 所有类文件名添加前缀\n" +
                 "\tdbdToBean.setSuffix(\"ng\"); // 所有类文件名添加后缀\n" +
                 "\tdbdToBean.setControllerPre(\"le\"); // Controller 类文件名添加前缀\n" +
@@ -133,14 +142,14 @@ public class DbdToBeanAPI {
      * @return API 文档
      */
     public String applicationApi(){
-        return "dbdtobean:\n" +
+        return "DbdToBean:\n" +
                 "  author-name: kele   # 作者名\n" +
                 "  driver-name: com.mysql.cj.jdbc.Driver    # 驱动\n" +
                 "  url: jdbc:mysql://localhost:3306/eightShoppingMail?useSSL-=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true\n" +
                 "  username: root  # 数据库用户名\n" +
                 "  password: 123456   # 数据库密码\n" +
                 "  base:\n" +
-                "    -to-upper: true # 开启数据库字段的 _ 去掉，并且后面首字母大写\n" +
+                "    lower-camel-case: true # 开启数据库字段的 _ 去掉，并且后面首字母大写\n" +
                 "  mvc:\n" +
                 "    entity-location: cn.kbt.entity   # 实体类全类路径\n" +
                 "    controller-location: cn.kbt.controller   # Controller 全类路径\n" +
@@ -148,8 +157,12 @@ public class DbdToBeanAPI {
                 "    mapper-location: cn.kbt.mapper      # Mapper 全类路径\n" +
                 "    dao-location: cn.kbt.dao     # Dao 全类路径\n" +
                 "    modules-name: cloud-provider-payment8001 # 模块名字，如果项目里有多个模块，可使用，反之不要使用\n" +
+                "    generate-curd: true # 是否生成基础的 CURD 方法\n" +
+                "    generate-request-body: true # CURD 方法的参数是否加上 @RequestBody\n" +
+                "    open-swagger: true # 是否生成 Swagger 相关配置\n" +
+                "    swagger-location: cn.kbt.config # Swagger 配置文件路径\n" +
                 "  comment:  \n" +
                 "    all-comments: true      # 是否开启全部注解\n" + 
-                "# 更多内容请访问 dbdToBeanCustomerMVCAPI 方法：DBDToBeanAPI.dbdToBeanCustomerMVCAPI()";
+                "# 更多内容请访问 DbdToBeanCustomerMVCAPI 方法：DbdToBeanAPI.DbdToBeanCustomerMVCAPI()";
     }
 }

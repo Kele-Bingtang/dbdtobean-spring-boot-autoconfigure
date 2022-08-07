@@ -102,11 +102,18 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
      * @throws SQLException SQL 异常
      */
     private void createField(StringBuilder sb, ResultSet columnsInfo) throws SQLException {
+        boolean startSwagger = DbdToBeanContext.getDbdToMvcDefinition().isOpenSwagger();
+        if(startSwagger) {
+            sb.append("@ApiModel(value = ").append(BeanUtils.addColon(createBeanName))
+                    .append(", description = ").append(BeanUtils.addColon(createBeanName)).append(")").append(oneLine);
+            String importContent = twoLine + "import io.swagger.annotations.ApiModel;" + oneLine + "import io.swagger.annotations.ApiModelProperty;";
+            sb.insert(sb.indexOf(";") + 1, importContent);
+        }
         sb.append("public class ").append(createBeanName).append(" {").append(oneLine);
         for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
             String fieldName = BeanUtils.parseFieldName(jdbcData.getColumnName(i));
             // 添加自定义注释，长度不满足则生成规定的注释
-            DbdToBeanContext.getCustomComment().customFiledComment(sb, columnsInfo, fieldName + "：", i);
+            DbdToBeanContext.getCustomComment().customFiledComment(sb, columnsInfo, fieldName, i);
             sb.append(oneTab).append("private ").append(fieldType(jdbcData.getColumnClassName(i)))
                     .append(" ").append(fieldName).append(";").append(oneLine);
         }

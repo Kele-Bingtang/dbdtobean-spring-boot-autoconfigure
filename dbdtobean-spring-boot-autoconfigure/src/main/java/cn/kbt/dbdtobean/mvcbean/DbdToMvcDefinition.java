@@ -121,11 +121,19 @@ public class DbdToMvcDefinition {
     /**
      * 是否生成开启 Swagger 注解
      */
-    private boolean startSwagger = false;
+    private boolean openSwagger = false;
     /**
      * Mapper.xml 的一行字段数
      */
     private int columnNum = 6;
+    /**
+     * Swagger 配置文件路径
+     */
+    private String swaggerLocation = null;
+    /**
+     * Swagger 版本，2 或者 3，默认 2
+     */
+    private SwaggerVersion swaggerVersion = SwaggerVersion.SWAGGER_2;
 
     public String getControllerLocation() {
         return controllerLocation;
@@ -357,12 +365,28 @@ public class DbdToMvcDefinition {
         this.columnNum = columnNum;
     }
 
-    public boolean isStartSwagger() {
-        return startSwagger;
+    public boolean isOpenSwagger() {
+        return openSwagger;
     }
 
-    public void setStartSwagger(boolean startSwagger) {
-        this.startSwagger = startSwagger;
+    public void setOpenSwagger(boolean openSwagger) {
+        this.openSwagger = openSwagger;
+    }
+
+    public String getSwaggerLocation() {
+        return swaggerLocation;
+    }
+
+    public SwaggerVersion getSwaggerVersion() {
+        return swaggerVersion;
+    }
+
+    public void setSwaggerVersion(SwaggerVersion swaggerVersion) {
+        this.swaggerVersion = swaggerVersion;
+    }
+
+    public void setSwaggerLocation(String swaggerLocation) {
+        this.swaggerLocation = swaggerLocation;
     }
 
     /**
@@ -389,5 +413,13 @@ public class DbdToMvcDefinition {
             dbdToMvcDefinition.setMapperXmlLocation(dbdToMvcDefinition.getMapperLocation());
             return DbdToMapper.SIMPLE_MAPPER_XML_HONE;
         }
+    }
+
+    /**
+     * SWAGGER_2 为 Swagger 2.x 版本
+     * OAS_30 为 Swagger 3.x 版本
+     */
+    public enum SwaggerVersion {
+        SWAGGER_2, OAS_30
     }
 }

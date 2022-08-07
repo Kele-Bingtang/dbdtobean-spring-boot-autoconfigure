@@ -13,7 +13,7 @@ public class HeadComment extends AbstractComment {
     private String author = "@author ";
     private String createTime = "@since ";
     private String version = "@version 1.0";
-    private String describe = " ";
+    private String describe = "";
     private StringBuilder headComments = new StringBuilder();
 
     public String getAuthor() {
@@ -94,10 +94,12 @@ public class HeadComment extends AbstractComment {
                 .append(oneLine).append(" * ")
                 .append(this.createTime).append(BeanUtils.getCurrentTime())
                 .append(oneLine).append(" * ")
-                .append(this.version)
-                .append(oneLine).append(" * ")
-                .append(this.describe)
-                .append(oneLine).append(" */").append(oneLine);
+                .append(this.version);
+        if(BeanUtils.isNotEmpty(this.describe)) {
+            this.headComments.append(oneLine).append(" * ")
+                    .append(this.describe);
+        }
+        this.headComments.append(oneLine).append(" */").append(oneLine);
         return headComments;
     }
 
