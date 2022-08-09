@@ -20,7 +20,7 @@ public class DbdToMvc implements IDbdToMVC {
     /** 定义类信息 **/
     List<DbdToBeanDefinition> definitions = DbdToBeanContext.getDbdToBeanDefinitions();
     
-    private static final Logger logger = LoggerFactory.getLogger(DbdToDao.class);
+    private static final Logger logger = LoggerFactory.getLogger(DbdToMvc.class);
 
 
     /**

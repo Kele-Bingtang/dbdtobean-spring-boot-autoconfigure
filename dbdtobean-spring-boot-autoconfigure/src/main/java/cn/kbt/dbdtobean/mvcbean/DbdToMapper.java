@@ -16,7 +16,7 @@ import java.util.List;
  * @version 1.6
  * @since 2021/9/21 23:09
  */
-public class DbdToMapper extends AbstractDbdToMVC {
+public class DbdToMapper extends AbstractDbdToMvc {
 
     protected static final  String MAPPER_INTERFACE_NAME = "Mapper";
     protected static final  String MAVEN_MAPPER_XML_HONE = "src\\main\\resources\\";

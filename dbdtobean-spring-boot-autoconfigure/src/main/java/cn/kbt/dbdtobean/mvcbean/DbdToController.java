@@ -10,7 +10,7 @@ import java.io.IOException;
  * @since 2021/9/21 21:18
  * @version 1.6
  */
-public class DbdToController extends AbstractDbdToMVC {
+public class DbdToController extends AbstractDbdToMvc {
     /**
      * Controller 名
      **/

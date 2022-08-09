@@ -1,7 +1,6 @@
 package cn.kbt.dbdtobean.core;
 
 import cn.kbt.dbdtobean.config.DbdToBeanProperties;
-import cn.kbt.dbdtobean.inter.IDbdToBeanCore;
 import cn.kbt.dbdtobean.mvcbean.DbdToMvcDefinition;
 import cn.kbt.dbdtobean.utils.BeanUtils;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.HashMap;
 
-public abstract class DbdToBeanCore implements IDbdToBeanCore {
+public abstract class DbdToBeanCore {
     private static final Logger logger = LoggerFactory.getLogger(DbdToBeanCore.class);
     /**
      * 数据库信息
@@ -49,8 +48,7 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
      * @return 内容
      * @throws SQLException SQL 异常
      */
-    @Override
-    public String createBeanFromTable(String tableName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException {
+    protected String createBeanFromTable(String tableName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException {
         DbdToBeanProperties dbdToBeanProperties = DbdToBeanContext.getDbdToBeanProperties();
         if (tableName == null) {
             logger.info("请输入要导出的表名或者数据库名");
@@ -244,8 +242,7 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
      * @throws SQLException SQL 异常
      * @throws IOException  IO 异常
      */
-    @Override
-    public HashMap<String, String> createBeanFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException, IOException {
+    protected HashMap<String, String> createBeanFromDataBase(String dateBaseName, boolean isConstructor, boolean isSetAndGet, boolean isToString) throws SQLException, IOException {
         String dateBaseType = DbdToBeanContext.getDbdToBeanDefinition().getDateBaseType();
         // 获取不同数据库的不同的查询多表的sql语句
         PreparedStatement stmt = getConnection().prepareStatement(parseDataBaseTypeAndGetSql(dateBaseName));
@@ -280,8 +277,7 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
      * @return 内容
      * @throws IOException IO 异常
      */
-    @Override
-    public String exportToFile(String fileContent, String path, String dirName) throws IOException {
+    protected String exportToFile(String fileContent, String path, String dirName) throws IOException {
         File location = beanLocation();
         String createPath;
         // 生成路径为空，则默认生成路径为桌面
@@ -298,8 +294,6 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
             boolean mkdirs = new File(createPath).mkdirs();
             if (mkdirs) {
                 logger.info("创建文件夹成功");
-            } else {
-                logger.info("创建文件夹失败，可能文件夹已经存在");
             }
             createPath = createPath + createBeanName + ".java";
         } else {  // 文件夹名为空，则文件放到生成路径下
@@ -307,8 +301,6 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
             boolean mkdirs = new File(path).mkdirs();
             if (mkdirs) {
                 logger.info("创建文件夹成功");
-            } else {
-                logger.info("创建文件夹失败，可能文件夹已经存在");
             }
             createPath = path + "/" + createBeanName + ".java";
         }
@@ -337,7 +329,7 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
      * @return 内容
      * @throws IOException IO 异常
      */
-    protected String exportToFiles(String createBeanName, String fileContent, String path, String dirName) throws IOException {
+    protected String exportToFile(String createBeanName, String fileContent, String path, String dirName) throws IOException {
         this.createBeanName = createBeanName;
         return exportToFile(fileContent, path, dirName);
     }
@@ -459,7 +451,7 @@ public abstract class DbdToBeanCore implements IDbdToBeanCore {
      *
      * @return 数据库对象
      */
-    public Connection getConnection() {
+    protected Connection getConnection() {
         return DbdToBeanContext.getDbdToBeanProperties().getConn();
     }
 

@@ -395,9 +395,9 @@ public class DbdToMvcDefinition {
      */
     public String getMavenOrSimple() {
         if (mavenOrSimple) {
-            return AbstractDbdToMVC.MAVEN_HONE;
+            return AbstractDbdToMvc.MAVEN_HONE;
         } else {
-            return AbstractDbdToMVC.SIMPLE_HONE;
+            return AbstractDbdToMvc.SIMPLE_HONE;
         }
     }
 

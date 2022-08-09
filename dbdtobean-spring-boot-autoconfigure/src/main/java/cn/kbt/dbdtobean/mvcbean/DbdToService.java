@@ -10,7 +10,7 @@ import java.io.IOException;
  * @version 1.6
  * @since 2021/9/21 21:45
  */
-public class DbdToService extends AbstractDbdToMVC {
+public class DbdToService extends AbstractDbdToMvc {
     /**
      * Service 接口基础名
      **/

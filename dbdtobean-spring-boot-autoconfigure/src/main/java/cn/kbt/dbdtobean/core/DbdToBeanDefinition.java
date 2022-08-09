@@ -29,7 +29,7 @@ public class DbdToBeanDefinition {
      **/
     private boolean jarPackage = true;
     /**
-     * 数据库生成的 JavaBean 内容属性值是否保持一样或者小写
+     * 数据库的字段和生成的 JavaBean 内容属性值是否保持一样或者小写
      **/
     private boolean fieldNameAllLower = false;
     /**

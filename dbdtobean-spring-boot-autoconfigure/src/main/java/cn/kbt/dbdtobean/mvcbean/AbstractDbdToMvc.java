@@ -13,7 +13,7 @@ import java.io.IOException;
  * @version 1.6
  * 抽象 MVC 类
  */
-public abstract class AbstractDbdToMVC {
+public abstract class AbstractDbdToMvc {
     /**
      * Maven 目录
      **/

@@ -10,7 +10,7 @@ import java.io.IOException;
  * @version 1.6
  * @since 2021/9/21 22:50
  */
-public class DbdToDao extends AbstractDbdToMVC {
+public class DbdToDao extends AbstractDbdToMvc {
     /**
      * Dao层接口基础名
      **/
