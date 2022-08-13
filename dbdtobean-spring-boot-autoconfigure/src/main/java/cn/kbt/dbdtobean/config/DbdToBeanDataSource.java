@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author Kele-Bing
- * @since  2022-28-06 21:28:26
+ * @since 2022-28-06 21:28:26
  * 读取 Spring Boot 配置文件的数据库信息
  */
 @ConfigurationProperties(prefix = "spring.datasource", ignoreInvalidFields = true)

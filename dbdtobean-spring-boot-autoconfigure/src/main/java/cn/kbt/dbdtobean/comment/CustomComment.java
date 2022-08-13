@@ -110,7 +110,7 @@ public class CustomComment extends AbstractComment {
         boolean startSwagger = DbdToBeanContext.getDbdToMvcDefinition().isOpenSwagger();
         if (BeanUtils.isNotEmpty(comment) && comment.size() >= i) {
             columnsInfo.next();
-            if(startSwagger) {
+            if (startSwagger) {
                 sb.append(oneTab).append("@ApiModelProperty(").append(BeanUtils.addColon(comment.get(i - 1))).append(")").append(oneLine);
             } else {
                 // 解析注释类型，生成不同类型的注释
@@ -119,7 +119,7 @@ public class CustomComment extends AbstractComment {
         } else {  // 没有自定义注释，获取数据库的注释
             if (DbdToBeanContext.getDefaultComment().isFieldComment()) {
                 if (BeanUtils.isNotEmpty(columnsInfo) && columnsInfo.next()) {
-                    if(startSwagger) {
+                    if (startSwagger) {
                         sb.append(oneLineAndOneTab).append("@ApiModelProperty(")
                                 .append(BeanUtils.addColon(BeanUtils.isNotEmpty(columnsInfo.getString(REMARKS)) ? columnsInfo.getString(REMARKS) : content))
                                 .append(")").append(oneLine);
@@ -128,7 +128,7 @@ public class CustomComment extends AbstractComment {
                         super.parseCommentType(sb, BeanUtils.isNotEmpty(columnsInfo.getString(REMARKS)) ? columnsInfo.getString(REMARKS) : content);
                     }
                 } else {  // 没有自定义注释，数据库的字段没有注释，生成规定的注释
-                    if(startSwagger) {
+                    if (startSwagger) {
                         sb.append(oneTab).append("@ApiModelProperty(")
                                 .append(BeanUtils.addColon(content))
                                 .append(")").append(oneLine);
@@ -240,9 +240,10 @@ public class CustomComment extends AbstractComment {
 
     /**
      * 自定义 MVC CURD 的方法注释
-     * @param sb 内容缓存区
-     * @param content 旧的内容
-     * @param params 参数的信息
+     *
+     * @param sb             内容缓存区
+     * @param content        旧的内容
+     * @param params         参数的信息
      * @param returnDescribe 返回值的描述
      */
     public void mvcComment(StringBuilder sb, String content, Map<String, String> params, String returnDescribe) {

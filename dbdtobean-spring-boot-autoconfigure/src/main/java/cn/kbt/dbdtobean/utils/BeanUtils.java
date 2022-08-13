@@ -14,22 +14,23 @@ import java.util.Random;
 
 /**
  * @author Kele-Bing
- * @since 2022-35-06 00:35:43
- * @version 1.6 
+ * @version 1.6
  * 工具类
-*/
+ * @since 2022-35-06 00:35:43
+ */
 public class BeanUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(BeanUtils.class);
     private static final Random RANDOM;
-    
+
     static {
         RANDOM = new SecureRandom();
     }
-    
+
     /**
      * 关闭资源
-     * @param rs 结果集
+     *
+     * @param rs    结果集
      * @param pstmt PreparedStatement 对象
      */
     public static void close(ResultSet rs, PreparedStatement pstmt) {
@@ -47,24 +48,27 @@ public class BeanUtils {
 
     /**
      * 内容是否为空
+     *
      * @param content 内容
      * @return true：为空，false：不为空
      */
-    public static boolean isEmpty(Object content){
-        return null == content  || "".equals(content);
+    public static boolean isEmpty(Object content) {
+        return null == content || "".equals(content);
     }
 
     /**
      * 内容是否为空
+     *
      * @param content 内容
      * @return true：不为空，false：为空
      */
-    public static boolean isNotEmpty(Object content){
+    public static boolean isNotEmpty(Object content) {
         return !isEmpty(content);
     }
 
     /**
      * 去掉字符串的下划线，并且下划线后的首字母大写
+     *
      * @param name 字符串
      * @return 字符串
      */
@@ -83,6 +87,7 @@ public class BeanUtils {
 
     /**
      * 将字符串的首字母转为大写
+     *
      * @param fieldName 字符串
      * @return 字符串
      */
@@ -98,6 +103,7 @@ public class BeanUtils {
 
     /**
      * 将字符串的首字母转为小写
+     *
      * @param fieldName 字符串
      * @return 字符串
      */
@@ -113,13 +119,14 @@ public class BeanUtils {
 
     /**
      * 字符串转为小写
+     *
      * @param content 字符串
      * @return 字符串
      */
-    public String toLowerCase(String content){
+    public String toLowerCase(String content) {
         char[] contentChars = content.toCharArray();
         for (int i = 0; i < contentChars.length; i++) {
-            if(contentChars[i] >= 'A' && contentChars[i] <= 'Z'){
+            if (contentChars[i] >= 'A' && contentChars[i] <= 'Z') {
                 contentChars[i] += 32;
             }
         }
@@ -128,13 +135,14 @@ public class BeanUtils {
 
     /**
      * 字符串转为大写
+     *
      * @param content 字符串
      * @return 字符串
      */
-    public String toUpperCase(String content){
+    public String toUpperCase(String content) {
         char[] contentChars = content.toCharArray();
         for (int i = 0; i < contentChars.length; i++) {
-            if(contentChars[i] >= 'a' && contentChars[i] <= 'z'){
+            if (contentChars[i] >= 'a' && contentChars[i] <= 'z') {
                 contentChars[i] -= 32;
             }
         }
@@ -145,11 +153,12 @@ public class BeanUtils {
      * 如果字符串第二个位置的字母为大写，则返回 true，反之 false
      * 符合 setter 和 getter 方法，生成 setter 和 getter 为：settTs(){}、gettTs(){}
      * 而不是 setTTs(){}、getTTs(){}
+     *
      * @param content 字符串
      * @return boolean
      */
-    public static boolean isTwoCharUpper(String content){
-        if(content.length() > 2){
+    public static boolean isTwoCharUpper(String content) {
+        if (content.length() > 2) {
             return content.substring(1, 2).equals(content.substring(1, 2).toUpperCase());
         }
         return false;
@@ -157,6 +166,7 @@ public class BeanUtils {
 
     /**
      * 0-1000 随机数字，生成文件名
+     *
      * @return 文件名
      */
     public static int randomNum() {
@@ -166,28 +176,31 @@ public class BeanUtils {
 
     /**
      * 格式化并获取当前时间
+     *
      * @return 当前时间
      */
-    public static String getCurrentTime(){
+    public static String getCurrentTime() {
         return getCurrentTime("yyyy-MM-dd HH:mm:ss");
     }
 
     /**
      * 根据格式格式化并获取当前时间
+     *
      * @param format 字符串
      * @return 当前时间
      */
-    public static String getCurrentTime(String format){
+    public static String getCurrentTime(String format) {
         Date date = new Date();
         return new SimpleDateFormat(format).format(date);
     }
 
     /**
      * 全类名转为类路径
+     *
      * @param content 全类名
      * @return 类路径
      */
-    public static String packageToPath(String content){
+    public static String packageToPath(String content) {
         return content.replace(".", "/");
     }
 
@@ -213,10 +226,11 @@ public class BeanUtils {
 
     /**
      * 获取 Mysql 的数据库源对象
+     *
      * @param driverName 驱动
-     * @param url 地址
-     * @param username 数据库用户名
-     * @param password 数据库密码
+     * @param url        地址
+     * @param username   数据库用户名
+     * @param password   数据库密码
      * @return 连接对象
      */
     public static Connection getConnection(String driverName, String url, String username, String password) {
@@ -232,6 +246,7 @@ public class BeanUtils {
 
     /**
      * 获取 \n，根据传入的数量返回相应的 \n
+     *
      * @param nNum \n 的数量
      * @return nNum 数量的 \n
      */
@@ -245,6 +260,7 @@ public class BeanUtils {
 
     /**
      * 获取 \t，根据传入的数量返回相应的 \t
+     *
      * @param tNum \t 的数量
      * @return tNum 数量的 \t
      */
@@ -258,6 +274,7 @@ public class BeanUtils {
 
     /**
      * 获取 \n 和 \t，根据传入的数量返回相应的 \n 和 \t
+     *
      * @param nNum \n 的数量
      * @param tNum \t 的数量
      * @return nNum 数量的 \n 加上 tNum 数量的 \t
@@ -268,6 +285,7 @@ public class BeanUtils {
 
     /**
      * 用 "" 将 content 包围起来
+     *
      * @param content 内容
      * @return "" 包围的 content
      */
@@ -278,6 +296,7 @@ public class BeanUtils {
     /**
      * 解释信息
      * 查询的表的信息的内容
+     *
      * @param rs 结果集
      * @throws SQLException SQL 异常
      */

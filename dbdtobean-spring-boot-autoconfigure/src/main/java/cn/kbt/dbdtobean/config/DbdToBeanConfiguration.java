@@ -27,16 +27,16 @@ public class DbdToBeanConfiguration {
     @Bean
     @ConditionalOnClass({DbdToBeanProperties.class})
     @ConditionalOnMissingBean(name = "getDbdToBean")
-    public DbdToBean getDbdToBean(){
+    public DbdToBean getDbdToBean() {
         return new DbdToBean();
     }
 
     @Bean
-    public void setDBDToBeanContext(){
+    public void setDBDToBeanContext() {
         DbdToBeanContext.setDbdToBeanProperties(dbdToBeanProperties);
         DbdToBeanContext.setDbdToBeanDefinition(dbdToBeanDefinition);
         DbdToBeanContext.setDbdToMvcDefinition(dbdToMVCDefinition);
         DbdToBeanContext.setDefaultComment(defaultComment);
     }
-    
+
 }

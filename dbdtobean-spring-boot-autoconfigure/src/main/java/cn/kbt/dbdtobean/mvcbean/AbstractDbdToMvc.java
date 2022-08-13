@@ -9,16 +9,17 @@ import java.io.IOException;
 
 /**
  * @author Kele-Bing
- * @since 2021/9/21 23:30
  * @version 1.6
  * 抽象 MVC 类
+ * @since 2021/9/21 23:30
  */
 public abstract class AbstractDbdToMvc {
     /**
      * Maven 目录
      **/
     public static final String MAVEN_HONE = "src/main/java/";
-    /**+
+    /**
+     * +
      * 普通目录
      **/
     protected static final String SIMPLE_HONE = "src/";
@@ -48,9 +49,9 @@ public abstract class AbstractDbdToMvc {
     /**
      * 创建接口类
      *
-     * @param definition MVC 信息
+     * @param definition     MVC 信息
      * @param createBeanName 文件名
-     * @param mvcName mvc 类型
+     * @param mvcName        mvc 类型
      * @return 内容
      * @throws IOException IO 异常
      */
@@ -58,7 +59,7 @@ public abstract class AbstractDbdToMvc {
         String location = parseLocation(definition, mvcName);
         File file = mvcFilePath(DbdToBeanContext.getDbdToMvcDefinition(), null, location);
         file.mkdirs();
-        String createClassName  = parseMvcName(DbdToBeanContext.getDbdToMvcDefinition(), createBeanName, mvcName);
+        String createClassName = parseMvcName(DbdToBeanContext.getDbdToMvcDefinition(), createBeanName, mvcName);
         file = new File(file + "/" + createClassName + ".java");
         FileWriter fw = new FileWriter(file);
         fw.write(mvcInterContent(definition, createBeanName, mvcName));
@@ -92,9 +93,9 @@ public abstract class AbstractDbdToMvc {
     /**
      * 解析路径，获取生成的路径
      *
-     * @param definition MVC 信息
+     * @param definition       MVC 信息
      * @param mvcInterfaceName MVC 接口名
-     * @param location 包路径
+     * @param location         包路径
      * @return 文件对象
      */
     private File mvcFilePath(DbdToMvcDefinition definition, String mvcInterfaceName, String location) {
@@ -112,9 +113,9 @@ public abstract class AbstractDbdToMvc {
     /**
      * 生成接口类内容
      *
-     * @param definition MVC 信息
+     * @param definition     MVC 信息
      * @param createBeanName 文件名
-     * @param mvcName mvc 类型
+     * @param mvcName        mvc 类型
      * @return 内容
      */
     private String mvcInterContent(DbdToMvcDefinition definition, String createBeanName, String mvcName) {
@@ -139,9 +140,9 @@ public abstract class AbstractDbdToMvc {
     /**
      * 生成普通类内容或者接口的实现类内容
      *
-     * @param definition MVC 信息
-     * @param createBeanName 文件名
-     * @param mvcName mvc 类型
+     * @param definition       MVC 信息
+     * @param createBeanName   文件名
+     * @param mvcName          mvc 类型
      * @param mvcInterfaceName MVC 接口类型
      * @return 内容
      */
@@ -195,7 +196,7 @@ public abstract class AbstractDbdToMvc {
                         .append(BeanUtils.addColon("/" + BeanUtils.firstCharToLowerCase(createBeanName)))
                         .append(")").append(oneLine);
             }
-            if(definition.isOpenSwagger()) {
+            if (definition.isOpenSwagger()) {
                 content.append("@Api(value = ").append(BeanUtils.addColon(createClassName))
                         .append(", tags = ").append(BeanUtils.addColon(createClassName)).append(")").append(oneLine);
             }
@@ -217,7 +218,7 @@ public abstract class AbstractDbdToMvc {
      * 解析位置，获取不同的MVC全类路径
      *
      * @param definition MVC 信息
-     * @param mvcName MVC 类型
+     * @param mvcName    MVC 类型
      * @return 内容
      */
     private String parseLocation(DbdToMvcDefinition definition, String mvcName) {
@@ -258,9 +259,9 @@ public abstract class AbstractDbdToMvc {
     /**
      * 解析 MVC 的文件名字，封装文件名字的前缀和后缀
      *
-     * @param definition MVC 信息
+     * @param definition     MVC 信息
      * @param createBeanName 文件名
-     * @param mvcName mvc 类型
+     * @param mvcName        mvc 类型
      * @return 内容
      */
     protected String parseMvcName(DbdToMvcDefinition definition, String createBeanName, String mvcName) {
@@ -286,6 +287,7 @@ public abstract class AbstractDbdToMvc {
 
     /**
      * 添加 Controller 的通用注解
+     *
      * @param content 内容
      */
     private void addControllerAnnotation(StringBuilder content) {

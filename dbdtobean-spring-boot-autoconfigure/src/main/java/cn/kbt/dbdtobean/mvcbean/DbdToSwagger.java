@@ -10,14 +10,15 @@ import java.io.IOException;
 
 /**
  * @author Young Kbt
- * @since 2022/8/7 21:03
  * @version 1.6
  * Swagger 文档生成工具
+ * @since 2022/8/7 21:03
  */
 public class DbdToSwagger {
 
     /**
      * 生成 Swagger 文档
+     *
      * @throws IOException IO 异常
      */
     public void createSwagger() throws IOException {
@@ -27,7 +28,7 @@ public class DbdToSwagger {
         String basePath = controllerLocation.substring(0, index);
         String swaggerPath = dbdToMvcDefinition.getSwaggerLocation();
         // 如果 Swagger 路径为空，则使用默认路径
-        if(BeanUtils.isEmpty(swaggerPath)){
+        if (BeanUtils.isEmpty(swaggerPath)) {
             swaggerPath = basePath + ".config";
         }
         File file = new File(System.getProperty("user.dir") + "/" + dbdToMvcDefinition.getModulesName() + "/" + dbdToMvcDefinition.getMavenOrSimple() + BeanUtils.packageToPath(swaggerPath));
@@ -41,6 +42,7 @@ public class DbdToSwagger {
 
     /**
      * 生成 Swagger 文档的内容
+     *
      * @param packageName 包名
      * @return Swagger 文档的内容
      */
@@ -58,16 +60,16 @@ public class DbdToSwagger {
         StringBuilder content = new StringBuilder();
         // 添加包路径
         content.append("package ").append(packageName).append(";").append(twoLine)
-            .append("import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;").append(oneLine)
-            .append("import org.springframework.context.annotation.Bean;").append(oneLine)
-            .append("import org.springframework.context.annotation.Configuration;").append(oneLine)
-            .append("import springfox.documentation.builders.ApiInfoBuilder;").append(oneLine)
-            .append("import springfox.documentation.builders.PathSelectors;").append(oneLine)
-            .append("import springfox.documentation.builders.RequestHandlerSelectors;").append(oneLine)
-            .append("import springfox.documentation.service.ApiInfo;").append(oneLine)
-            .append("import springfox.documentation.spi.DocumentationType;").append(oneLine)
-            .append("import springfox.documentation.spring.web.plugins.Docket;").append(oneLine)
-            .append("import springfox.documentation.swagger2.annotations.EnableSwagger2;").append(twoLine);
+                .append("import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;").append(oneLine)
+                .append("import org.springframework.context.annotation.Bean;").append(oneLine)
+                .append("import org.springframework.context.annotation.Configuration;").append(oneLine)
+                .append("import springfox.documentation.builders.ApiInfoBuilder;").append(oneLine)
+                .append("import springfox.documentation.builders.PathSelectors;").append(oneLine)
+                .append("import springfox.documentation.builders.RequestHandlerSelectors;").append(oneLine)
+                .append("import springfox.documentation.service.ApiInfo;").append(oneLine)
+                .append("import springfox.documentation.spi.DocumentationType;").append(oneLine)
+                .append("import springfox.documentation.spring.web.plugins.Docket;").append(oneLine)
+                .append("import springfox.documentation.swagger2.annotations.EnableSwagger2;").append(twoLine);
         // 添加自定义类注释或者默认注释，默认注释格式为 @author @since @version  
         content.append(dbdToBeanDefinition.getHeadComment().getHeadComments().toString());
         // 添加类
@@ -107,5 +109,5 @@ public class DbdToSwagger {
         content.append("}");
         return content.toString();
     }
-    
+
 }

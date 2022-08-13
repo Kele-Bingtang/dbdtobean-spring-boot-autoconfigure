@@ -391,6 +391,7 @@ public class DbdToMvcDefinition {
 
     /**
      * 获取 Maven 或者普通目录
+     *
      * @return Maven 结构还是普通 Java 结构
      */
     public String getMavenOrSimple() {
@@ -403,6 +404,7 @@ public class DbdToMvcDefinition {
 
     /**
      * 获取 Mapper 的 xml 路径
+     *
      * @return Mapper 的 XML 路径
      */
     protected String getMapperPath() {

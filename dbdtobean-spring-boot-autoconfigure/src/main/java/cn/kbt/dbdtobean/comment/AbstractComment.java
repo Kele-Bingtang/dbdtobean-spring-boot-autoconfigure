@@ -52,12 +52,21 @@ public abstract class AbstractComment {
      * @param comment     注释
      * @param commentType 注释的类型
      */
+    /**
+     * 给类的内容注释
+     * 解析注释类型，生成不同类型的注释
+     *
+     * @param sb            字符串
+     * @param comment       注释
+     * @param commentType   注释的类型
+     * @param isHeadComment 是否开启头注释
+     */
     protected void parseCommentType(StringBuilder sb, String comment, String commentType, boolean isHeadComment) {
         String oneTab = BeanUtils.getT(1);
         String oneLine = BeanUtils.getN(1);
         String oneLineAndOneTab = BeanUtils.getNT(1, 1);
         String oneLineAndTwoTab = BeanUtils.getNT(1, 2);
-        if(!isHeadComment) {
+        if (!isHeadComment) {
             sb.append(oneTab);
         }
         if ("//".equals(commentType)) {
@@ -70,20 +79,21 @@ public abstract class AbstractComment {
             sb.append("/**").append(isHeadComment ? oneLine : oneLineAndOneTab)
                     .append(" * ").append(comment).append(isHeadComment ? oneLine : oneLineAndOneTab)
                     .append(" */").append(oneLine);
-        } 
+        }
     }
 
     /**
-     *MVC 的 CURD 方法注释
-     * @param sb 内容缓存区
-     * @param content 旧的内容
-     * @param params 参数的信息
+     * MVC 的 CURD 方法注释
+     *
+     * @param sb             内容缓存区
+     * @param content        旧的内容
+     * @param params         参数的信息
      * @param returnDescribe 返回值的描述
      */
     protected void mvcComment(StringBuilder sb, String content, Map<String, String> params, String returnDescribe) {
         sb.append(BeanUtils.getT(1)).append("/**").append(BeanUtils.getNT(1, 1))
                 .append(" * ").append(content).append(BeanUtils.getNT(1, 1));
-        if(!BeanUtils.isEmpty(params)) {
+        if (!BeanUtils.isEmpty(params)) {
             for (Map.Entry<String, String> entry : params.entrySet()) {
                 sb.append(" * @param ").append(entry.getKey()).append(" ").append(entry.getValue()).append(BeanUtils.getNT(1, 1));
             }

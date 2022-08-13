@@ -82,6 +82,7 @@ public class HeadComment extends AbstractComment {
 
     /**
      * 生成类注释
+     *
      * @param author 作者
      * @return 内容
      */
@@ -95,7 +96,7 @@ public class HeadComment extends AbstractComment {
                 .append(this.createTime).append(BeanUtils.getCurrentTime())
                 .append(oneLine).append(" * ")
                 .append(this.version);
-        if(BeanUtils.isNotEmpty(this.describe)) {
+        if (BeanUtils.isNotEmpty(this.describe)) {
             this.headComments.append(oneLine).append(" * ")
                     .append(this.describe);
         }

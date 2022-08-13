@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author Kele-Bing
- * @since  2021/9/20 11:38
  * @version 1.6
  * 定义信息类
+ * @since 2021/9/20 11:38
  */
 @ConfigurationProperties(prefix = "dbdtobean.base", ignoreInvalidFields = true)
 public class DbdToBeanDefinition {

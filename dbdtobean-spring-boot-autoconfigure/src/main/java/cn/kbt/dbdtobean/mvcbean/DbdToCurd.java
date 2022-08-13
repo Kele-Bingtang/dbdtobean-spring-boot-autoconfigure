@@ -9,8 +9,8 @@ import java.util.Map;
 
 /**
  * @author Kele-Bing
- * @since 2021/9/23 11:31
  * @version 1.6
+ * @since 2021/9/23 11:31
  */
 public class DbdToCurd {
     /**
@@ -26,7 +26,7 @@ public class DbdToCurd {
     /**
      * 生成继承第三方 jar 包内容
      *
-     * @param content 内容
+     * @param content    内容
      * @param entityName 实体类名
      */
     private void createImport(StringBuilder content, String entityName) {
@@ -38,8 +38,8 @@ public class DbdToCurd {
     /**
      * 生成根据ID查询数据的方法
      *
-     * @param content 内容
-     * @param entityName 实体类名
+     * @param content      内容
+     * @param entityName   实体类名
      * @param isController 是否在 Controller 生成
      * @return 内容
      */
@@ -58,7 +58,7 @@ public class DbdToCurd {
     /**
      * 生成查询所有数据的方法
      *
-     * @param content 内容
+     * @param content    内容
      * @param entityName 实体类名
      * @return 内容
      */
@@ -74,8 +74,8 @@ public class DbdToCurd {
     /**
      * 生成插入数据的方法
      *
-     * @param content 内容
-     * @param entityName 实体类名
+     * @param content      内容
+     * @param entityName   实体类名
      * @param isController 是否在 Controller 生成
      * @return 内容
      */
@@ -83,7 +83,7 @@ public class DbdToCurd {
         content.append(oneTab).append("public ").append("int").append(" insert")
                 .append(entityName)
                 .append("(");
-        if(isController && dbdToMvcDefinition.isGenerateRequestBody()) {
+        if (isController && dbdToMvcDefinition.isGenerateRequestBody()) {
             content.append("@RequestBody ");
         }
         content.append(entityName)
@@ -96,8 +96,8 @@ public class DbdToCurd {
     /**
      * 生成更新数据的方法
      *
-     * @param content 内容
-     * @param entityName 实体类名
+     * @param content      内容
+     * @param entityName   实体类名
      * @param isController 是否在 Controller 生成
      * @return 内容
      */
@@ -105,7 +105,7 @@ public class DbdToCurd {
         content.append(oneTab).append("public ").append("int").append(" update")
                 .append(entityName)
                 .append("(");
-        if(isController && dbdToMvcDefinition.isGenerateRequestBody()) {
+        if (isController && dbdToMvcDefinition.isGenerateRequestBody()) {
             content.append("@RequestBody ");
         }
         content.append(entityName)
@@ -118,8 +118,8 @@ public class DbdToCurd {
     /**
      * 生成根据 ID 删除数据的方法
      *
-     * @param content 内容
-     * @param entityName 实体类名
+     * @param content      内容
+     * @param entityName   实体类名
      * @param isController 是否在 Controller 生成
      * @return 内容
      */
@@ -139,8 +139,8 @@ public class DbdToCurd {
      * 生成 Controller 的 CURD 方法
      * V1.6
      *
-     * @param content 内容
-     * @param entityName 实体类名
+     * @param content        内容
+     * @param entityName     实体类名
      * @param importBeanName import 的类名
      */
     protected void generateControllerCurd(StringBuilder content, String entityName, String importBeanName) {
@@ -148,7 +148,7 @@ public class DbdToCurd {
             this.createImport(content, entityName);
             if (BeanUtils.isNotEmpty(importBeanName)) {
                 // Swagger 注解
-                if(dbdToMvcDefinition.isOpenSwagger()) {
+                if (dbdToMvcDefinition.isOpenSwagger()) {
                     String importContent = twoLine + "import io.swagger.annotations.Api;" + oneLine + "import io.swagger.annotations.ApiOperation;";
                     content.insert(content.indexOf(";") + 1, importContent);
                     content.append(oneTab).append("@ApiOperation(").append(BeanUtils.addColon("根据 ID 查询一条数据")).append(")").append(oneLine);
@@ -165,7 +165,7 @@ public class DbdToCurd {
                         .append(");").append(oneLineAndOneTab).append("}").append(twoLine);
 
                 // Swagger 注解
-                if(dbdToMvcDefinition.isOpenSwagger()) {
+                if (dbdToMvcDefinition.isOpenSwagger()) {
                     content.append(oneTab).append("@ApiOperation(").append(BeanUtils.addColon("查询所有数据")).append(")").append(oneLine);
                 }
                 // GetMapping 注解
@@ -180,7 +180,7 @@ public class DbdToCurd {
                         .append(oneLineAndOneTab).append("}").append(twoLine);
 
                 // Swagger 注解
-                if(dbdToMvcDefinition.isOpenSwagger()) {
+                if (dbdToMvcDefinition.isOpenSwagger()) {
                     content.append(oneTab).append("@ApiOperation(").append(BeanUtils.addColon("插入一条数据")).append(")").append(oneLine);
                 }
                 // PostMapping 注解
@@ -195,7 +195,7 @@ public class DbdToCurd {
                         .append(");").append(oneLineAndOneTab).append("}").append(twoLine);
 
                 // Swagger 注解
-                if(dbdToMvcDefinition.isOpenSwagger()) {
+                if (dbdToMvcDefinition.isOpenSwagger()) {
                     content.append(oneTab).append("@ApiOperation(").append(BeanUtils.addColon("更新一条数据")).append(")").append(oneLine);
                 }
                 // PostMapping 注解
@@ -210,7 +210,7 @@ public class DbdToCurd {
                         .append(");").append(oneLineAndOneTab).append("}").append(twoLine);
 
                 // Swagger 注解
-                if(dbdToMvcDefinition.isOpenSwagger()) {
+                if (dbdToMvcDefinition.isOpenSwagger()) {
                     content.append(oneTab).append("@ApiOperation(").append(BeanUtils.addColon("根据 ID 删除一条数据")).append(")").append(oneLine);
                 }
                 // PostMapping 注解
@@ -244,12 +244,13 @@ public class DbdToCurd {
             throw new RuntimeException("如果使用CURD，请设置实体类路径：.setEntityLocation()");
         }
     }
+
     /**
      * 生成实现类的 CURD
      *
-     * @param content 内容
-     * @param entityName 实体类名
-     * @param isInterface 是否是接口
+     * @param content        内容
+     * @param entityName     实体类名
+     * @param isInterface    是否是接口
      * @param importBeanName import 的类名
      */
     protected void generateImplCurd(StringBuilder content, String entityName, boolean isInterface, String importBeanName) {
@@ -263,54 +264,56 @@ public class DbdToCurd {
                             .append(".").append("query").append(entityName).append("ById(")
                             .append(BeanUtils.firstCharToLowerCase(entityName)).append(");")
                             .append(oneLineAndOneTab).append("}").append(twoLine);
-                    
+
                     this.createQuery(content, entityName)
                             .append(" {").append(oneLineAndTwoTab).append("return ")
                             .append(BeanUtils.firstCharToLowerCase(importBeanName))
                             .append(".").append("query")
                             .append(entityName).append("List();")
                             .append(oneLineAndOneTab).append("}").append(twoLine);
-                    
+
                     this.createInsert(content, entityName, false)
                             .append(" {").append(oneLineAndTwoTab).append("return ")
                             .append(BeanUtils.firstCharToLowerCase(importBeanName))
                             .append(".").append("insert").append(entityName).append("(")
                             .append(BeanUtils.firstCharToLowerCase(entityName)).append(");")
                             .append(oneLineAndOneTab).append("}").append(twoLine);
-                    
+
                     this.createUpdate(content, entityName, false)
                             .append(" {").append(oneLineAndTwoTab).append("return ")
                             .append(BeanUtils.firstCharToLowerCase(importBeanName))
                             .append(".").append("update").append(entityName).append("(")
                             .append(BeanUtils.firstCharToLowerCase(entityName)).append(");")
-                            .append(oneLineAndOneTab).append("}").append(twoLine);;
-                    
+                            .append(oneLineAndOneTab).append("}").append(twoLine);
+                    ;
+
                     this.createDeleteById(content, entityName, false)
                             .append(" {").append(oneLineAndTwoTab).append("return ")
                             .append(BeanUtils.firstCharToLowerCase(importBeanName))
                             .append(".").append("delete").append(entityName).append("ById(")
                             .append(BeanUtils.firstCharToLowerCase(entityName)).append(");")
-                            .append(oneLineAndOneTab).append("}").append(twoLine);;
+                            .append(oneLineAndOneTab).append("}").append(twoLine);
+                    ;
                 } else {
                     this.createQueryById(content, entityName, false)
                             .append(" {").append(oneLineAndTwoTab)
                             .append("return null;").append(oneLineAndOneTab)
                             .append("}").append(twoLine);
-                    
+
                     this.createQuery(content, entityName)
                             .append(" {").append(oneLineAndTwoTab)
                             .append("return null;").append(oneLineAndOneTab)
                             .append("}").append(twoLine);
-                    
+
                     this.createInsert(content, entityName, false)
                             .append(" {").append(oneLineAndTwoTab)
                             .append("return 0;").append(oneLineAndOneTab)
                             .append("}").append(twoLine);
-                    
+
                     this.createUpdate(content, entityName, false).append(" {").append(oneLineAndTwoTab)
                             .append("return 0;").append(oneLineAndOneTab)
                             .append("}").append(twoLine);
-                    
+
                     this.createDeleteById(content, entityName, false).append(" {").append(oneLineAndTwoTab)
                             .append("return 0;").append(oneLineAndOneTab)
                             .append("}").append(twoLine);
@@ -327,7 +330,7 @@ public class DbdToCurd {
     /**
      * 生成接口的 CURD
      *
-     * @param content 内容
+     * @param content    内容
      * @param entityName 实体类名
      */
     protected void generateInterCurd(StringBuilder content, String entityName) {
@@ -337,19 +340,19 @@ public class DbdToCurd {
                 Map<String, String> map = new HashMap<>();
                 map.put(BeanUtils.firstCharToLowerCase(entityName), "实体对象");
                 this.createImport(content, entityName);
-                
+
                 customComment.mvcComment(content, "根据 ID 查询一条数据", map, "根据 ID 查询出的实体对象");
                 this.createQueryById(content, entityName, false).append(";").append(oneLineAndOneTab).append(oneLine);
-                
+
                 customComment.mvcComment(content, "查询所有数据", null, "所有数据的实体对象集合");
                 this.createQuery(content, entityName).append(";").append(oneLineAndOneTab).append(oneLine);
-                
+
                 customComment.mvcComment(content, "插入一条数据", map, "受影响的行数");
                 this.createInsert(content, entityName, false).append(";").append(oneLineAndOneTab).append(oneLine);
-                
+
                 customComment.mvcComment(content, "更新一条数据", map, "受影响的行数");
                 this.createUpdate(content, entityName, false).append(";").append(oneLineAndOneTab).append(oneLine);
-                
+
                 customComment.mvcComment(content, "根据 ID 删除一条数据", map, "受影响的行数");
                 this.createDeleteById(content, entityName, false).append(";").append(oneLineAndOneTab).append(oneLine);
             } else {

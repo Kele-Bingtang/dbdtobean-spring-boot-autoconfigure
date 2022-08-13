@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class DbdToMapper extends AbstractDbdToMvc {
 
-    protected static final  String MAPPER_INTERFACE_NAME = "Mapper";
-    protected static final  String MAVEN_MAPPER_XML_HONE = "src\\main\\resources\\";
-    protected static final  String SIMPLE_MAPPER_XML_HONE = "src\\";
+    protected static final String MAPPER_INTERFACE_NAME = "Mapper";
+    protected static final String MAVEN_MAPPER_XML_HONE = "src\\main\\resources\\";
+    protected static final String SIMPLE_MAPPER_XML_HONE = "src\\";
     protected static String interfacesName = null;
     private String entityName;
     private static final String RESULT_MAP_ID = "baseResultMap";
@@ -52,6 +52,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
      * 生成 Mapper 层 xml 文件目录以及内容
      *
      * @param createBeanName 文件名
+     * @param tableName      表名
      * @throws IOException IO 异常
      */
     protected void mapperXml(String createBeanName, String tableName) throws IOException {
@@ -74,17 +75,18 @@ public class DbdToMapper extends AbstractDbdToMvc {
      * @return 内容
      */
     private String createXmlStart(String tableName) {
-        return "<?xml version=" + BeanUtils.addColon("1.0") + " encoding="  + BeanUtils.addColon("UTF-8") + "?>" + oneLine + 
-                "<!DOCTYPE mapper" + oneLineAndTwoTab + 
+        return "<?xml version=" + BeanUtils.addColon("1.0") + " encoding=" + BeanUtils.addColon("UTF-8") + "?>" + oneLine +
+                "<!DOCTYPE mapper" + oneLineAndTwoTab +
                 xmlPublicAndHttp +
-                ">" + oneLine +  
-                "<mapper namespace = " + BeanUtils.addColon(DbdToBeanContext.getDbdToMvcDefinition().getMapperLocation() + "." + interfacesName) + ">" + 
+                ">" + oneLine +
+                "<mapper namespace = " + BeanUtils.addColon(DbdToBeanContext.getDbdToMvcDefinition().getMapperLocation() + "." + interfacesName) + ">" +
                 (DbdToBeanContext.getDbdToMvcDefinition().isGenerateCurd() ? twoLineAndOneTab + this.createXmlBeans(tableName) : "") +
                 twoLine + "</mapper>";
     }
 
     /**
      * 初始化获取数据库数据信息，创建 Mapper 的 Bean
+     *
      * @param tableName 表名
      * @return 内容
      */
@@ -105,10 +107,10 @@ public class DbdToMapper extends AbstractDbdToMvc {
      */
     private String createXmlBeansCurd(String tableName) {
         return "<select id = " + BeanUtils.addColon("query" + entityName + "ById") +
-                " parameterType = " + BeanUtils.addColon(DbdToBeanContext.getDbdToMvcDefinition().getEntityLocation() + "." + entityName) + 
+                " parameterType = " + BeanUtils.addColon(DbdToBeanContext.getDbdToMvcDefinition().getEntityLocation() + "." + entityName) +
                 " resultMap = " + BeanUtils.addColon(RESULT_MAP_ID) + ">" +
                 oneLineAndTwoTab + this.createQueryOne(tableName) +
-                oneLineAndOneTab + "</select>" + twoLineAndOneTab + 
+                oneLineAndOneTab + "</select>" + twoLineAndOneTab +
 
                 "<select id = " + BeanUtils.addColon("query" + entityName + "List") +
                 " resultMap = " + BeanUtils.addColon(RESULT_MAP_ID) + ">" +
@@ -133,6 +135,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
 
     /**
      * 创建 ResultMap 标签及其内容
+     *
      * @param tableName 表名
      * @return 内容
      */
@@ -143,7 +146,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
                 .append(">").append(oneLineAndTwoTab);
         List<String> primaryKeys = getPrimaryKeys(tableName);
         // 主键存在，则是 id 标签
-        if(!primaryKeys.isEmpty()) {
+        if (!primaryKeys.isEmpty()) {
             for (String primaryKey : primaryKeys) {
                 sb.append("<id column = ").append(BeanUtils.addColon(primaryKey))
                         .append(" property = ").append(BeanUtils.addColon(BeanUtils.parseFieldName(primaryKey)))
@@ -151,9 +154,9 @@ public class DbdToMapper extends AbstractDbdToMvc {
             }
         }
         try {
-            if(BeanUtils.isNotEmpty(databaseMetaData)) {
+            if (BeanUtils.isNotEmpty(databaseMetaData)) {
                 for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-                    if(columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
+                    if (columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
                         continue;
                     }
                     sb.append("<result column = ").append(BeanUtils.addColon(resultSetMetaData.getColumnName(i))).append("")
@@ -168,19 +171,20 @@ public class DbdToMapper extends AbstractDbdToMvc {
         sb.append("</resultMap>").append(twoLineAndOneTab);
         return sb.toString();
     }
-    
+
     /**
      * 创建 sql 标签及其内容
+     *
      * @return 内容
      */
     private String createSqlLabel() {
         StringBuilder sb = new StringBuilder("<sql id = ");
         sb.append(BeanUtils.addColon(SQL_ID)).append(">").append(oneLineAndTwoTab);
         try {
-            if(BeanUtils.isNotEmpty(databaseMetaData)) {
+            if (BeanUtils.isNotEmpty(databaseMetaData)) {
                 for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
                     sb.append(resultSetMetaData.getColumnName(i)).append(", ");
-                    if(i == DbdToBeanContext.getDbdToMvcDefinition().getColumnNum()) {
+                    if (i == DbdToBeanContext.getDbdToMvcDefinition().getColumnNum()) {
                         sb.append(oneLineAndTwoTab);
                     }
                 }
@@ -193,9 +197,10 @@ public class DbdToMapper extends AbstractDbdToMvc {
         sb.append(twoLineAndOneTab);
         return sb.toString();
     }
-    
+
     /**
      * 创建 select 标签及其内容：通过 ID 查询数据
+     *
      * @param tableName 表名
      * @return 内容
      */
@@ -210,9 +215,10 @@ public class DbdToMapper extends AbstractDbdToMvc {
         }
         return null;
     }
-    
+
     /**
      * 创建 select 标签及其内容：查询全部数据
+     *
      * @param tableName 表名
      * @return 内容
      */
@@ -220,11 +226,12 @@ public class DbdToMapper extends AbstractDbdToMvc {
         return BeanUtils.isNotEmpty(databaseMetaData) ?
                 "select" + oneLineAndThreeTab + "<include refid = " + BeanUtils.addColon(SQL_ID)
                         + " />" + oneLineAndTwoTab + "from " + tableName : null;
-        
+
     }
 
     /**
      * 创建 insert 标签及其内容
+     *
      * @param tableName 表名
      * @return 内容
      */
@@ -237,7 +244,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
                     .append(">").append(oneLineAndThreeTab);
             try {
                 for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-                    if(columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
+                    if (columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
                         continue;
                     }
                     sb.append("<if test = ")
@@ -257,7 +264,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
                     .append(BeanUtils.addColon(",")).append(">").append(oneLineAndThreeTab);
             try {
                 for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-                    if(columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
+                    if (columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
                         continue;
                     }
                     sb.append("<if test = ").append(BeanUtils.addColon(BeanUtils.parseFieldName(resultSetMetaData.getColumnName(i) + " != null")))
@@ -269,15 +276,16 @@ public class DbdToMapper extends AbstractDbdToMvc {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            sb.delete(sb.length() - 1,sb.length());
+            sb.delete(sb.length() - 1, sb.length());
             sb.append("</trim>");
             return sb.toString();
         }
         return null;
     }
-    
+
     /**
      * 创建 update 标签及其内容
+     *
      * @param tableName 表名
      * @return 内容
      */
@@ -287,7 +295,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
             sb.append(oneLineAndTwoTab).append("<set>").append(oneLineAndThreeTab);
             try {
                 for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
-                    if(columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
+                    if (columnIsPrimaryKey(tableName, resultSetMetaData.getColumnName(i))) {
                         continue;
                     }
                     sb.append("<if test = ").append(BeanUtils.addColon(BeanUtils.parseFieldName(resultSetMetaData.getColumnName(i) + " != null")))
@@ -299,7 +307,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            sb.delete(sb.length() - 1,sb.length());
+            sb.delete(sb.length() - 1, sb.length());
             sb.append("</set>").append(oneLineAndTwoTab);
             this.createWhereClause(sb, tableName);
             return sb.toString();
@@ -309,17 +317,20 @@ public class DbdToMapper extends AbstractDbdToMvc {
 
     /**
      * 创建 delete 标签及其内容
+     *
      * @param tableName 表名
      * @return 内容
      */
     private String createDelete(String tableName) {
-        StringBuilder sb = new StringBuilder( "delete from " + tableName);
+        StringBuilder sb = new StringBuilder("delete from " + tableName);
         this.createWhereClause(sb, tableName);
         return sb.toString();
     }
+
     /**
      * 创建 where 标签及其内容
-     * @param sb 内容
+     *
+     * @param sb        内容
      * @param tableName 表名
      */
     private void createWhereClause(StringBuilder sb, String tableName) {
@@ -329,7 +340,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
             // 主键不存在，则取第一个字段作为条件
             if (primaryKeys.isEmpty()) {
                 sb.append(resultSetMetaData.getColumnName(1)).append(" = #{").append(BeanUtils.parseFieldName(resultSetMetaData.getColumnName(1))).append("}, ");
-            }else {
+            } else {
                 // 主键存在
                 for (String primaryKey : primaryKeys) {
                     sb.append(primaryKey).append(" = #{").append(BeanUtils.parseFieldName(primaryKey)).append("} and ");
@@ -343,6 +354,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
 
     /**
      * 获取数据源信息
+     *
      * @param tableName 表名
      */
     private void getMetaData(String tableName) throws SQLException {
@@ -351,7 +363,7 @@ public class DbdToMapper extends AbstractDbdToMvc {
         String sql = "select * from `" + tableName + "`";
         PreparedStatement stmt = connection.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
-        if(rs.next()) {
+        if (rs.next()) {
             resultSetMetaData = rs.getMetaData();
         }
         BeanUtils.close(rs, stmt);
@@ -359,12 +371,13 @@ public class DbdToMapper extends AbstractDbdToMvc {
 
     /**
      * 获取表的主键
+     *
      * @param tableName 表名
      * @return 主键集合
      */
-    private List<String> getPrimaryKeys(String tableName){
-        if(null != databaseMetaData) {
-            try(ResultSet rs = databaseMetaData.getPrimaryKeys(null, null, tableName)){
+    private List<String> getPrimaryKeys(String tableName) {
+        if (null != databaseMetaData) {
+            try (ResultSet rs = databaseMetaData.getPrimaryKeys(null, null, tableName)) {
                 if (null == rs) {
                     return Collections.emptyList();
                 }
@@ -374,24 +387,25 @@ public class DbdToMapper extends AbstractDbdToMvc {
                     pks.add(pkStr);
                 }
                 return pks;
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return Collections.emptyList();
     }
-    
+
     /**
      * 判断当前字段是否是主键
-     * @param tableName 表名
+     *
+     * @param tableName  表名
      * @param columnName 字段
      * @return true：该字段是主键，false：该字段不是主键
      */
     private boolean columnIsPrimaryKey(String tableName, String columnName) {
         List<String> primaryKeys = getPrimaryKeys(tableName);
-        if(!primaryKeys.isEmpty()) {
+        if (!primaryKeys.isEmpty()) {
             for (String primaryKey : primaryKeys) {
-                if(primaryKey.equals(columnName)) {
+                if (primaryKey.equals(columnName)) {
                     return true;
                 }
             }

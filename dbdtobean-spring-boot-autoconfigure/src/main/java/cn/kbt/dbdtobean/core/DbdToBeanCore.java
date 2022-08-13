@@ -101,7 +101,7 @@ public abstract class DbdToBeanCore {
      */
     private void createField(StringBuilder sb, ResultSet columnsInfo) throws SQLException {
         boolean startSwagger = DbdToBeanContext.getDbdToMvcDefinition().isOpenSwagger();
-        if(startSwagger) {
+        if (startSwagger) {
             sb.append("@ApiModel(value = ").append(BeanUtils.addColon(createBeanName))
                     .append(", description = ").append(BeanUtils.addColon(createBeanName)).append(")").append(oneLine);
             String importContent = twoLine + "import io.swagger.annotations.ApiModel;" + oneLine + "import io.swagger.annotations.ApiModelProperty;";
@@ -126,7 +126,7 @@ public abstract class DbdToBeanCore {
      * @throws SQLException SQL 异常
      */
     private void createConstructor(StringBuilder sb, boolean isConstructor) throws SQLException {
-        
+
         if (isConstructor) {
             // 去掉结尾 } 符号
             sb.setLength(sb.length() - 1);
@@ -213,20 +213,20 @@ public abstract class DbdToBeanCore {
             for (int i = 1; i <= jdbcData.getColumnCount(); i++) {
                 String columns = jdbcData.getColumnName(i);
                 String fieldName = BeanUtils.parseFieldName(columns);
-                if("String".equals(fieldType(jdbcData.getColumnClassName(i)))) {
+                if ("String".equals(fieldType(jdbcData.getColumnClassName(i)))) {
                     sb.append(BeanUtils.addColon(", " + fieldName + "="))
                             .append(" + ").append(fieldName)
                             .append(" + ").append(oneLineAndFourTab);
-                }else {
+                } else {
                     sb.append(BeanUtils.addColon(", " + fieldName + "="))
                             .append(" + ").append(fieldName)
                             .append(" + '\\'' + ").append(oneLineAndFourTab);
                 }
-                
+
             }
             sb.append(BeanUtils.addColon("}")).append(";")
                     .append(oneLineAndOneTab).append("}")
-                            .append(oneLine).append("}");
+                    .append(oneLine).append("}");
         }
     }
 
